@@ -8,6 +8,8 @@ export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code"); // /?code=356e31f4-5da2-41f3-b137-3894c8d923bd like this
   const origin = requestUrl.origin; // origin: 'http://localhost:3000'
+  
+  // for password reset-process - /protected/reset-password
   const redirectTo = requestUrl.searchParams.get("redirect_to")?.toString();
 
   if (code) {
