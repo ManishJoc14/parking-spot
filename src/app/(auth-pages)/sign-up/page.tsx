@@ -1,8 +1,10 @@
 import { signUpAction, signInWithGoogleAction } from "@/app/actions";
 import { FormMessage, Message } from "@/components/form-message";
 import { SubmitButton } from "@/components/submit-button";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ChevronLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -15,7 +17,13 @@ export default async function Signup(props: {
     <div className="w-full h-full flex flex-col justify-center items-center">
       {/* Email handler */}
       <form className="max-w-md  w-full flex flex-col">
-        <h1 className="text-2xl font-medium">Sign up</h1>
+        <Link href="/" className="mb-8 -mt-16">
+          <Button variant="ghost">
+            <ChevronLeft className="mr-2 h-5 w-5" />
+            Back to Home
+          </Button>
+        </Link>
+        <h1 className="text-2xl font-mont-medium">Sign up</h1>
         <p className="text-sm text text-foreground">
           Already have an account?{" "}
           <Link className="text-primary font-medium underline" href="/sign-in">

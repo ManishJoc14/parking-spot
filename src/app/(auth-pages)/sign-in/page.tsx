@@ -1,8 +1,11 @@
 import { signInAction, signInWithGoogleAction } from "@/app/actions";
+import Breadcrumbs from "@/components/adminComponents/manageParkingSpots/breadcrumbs";
 import { FormMessage, Message } from "@/components/form-message";
 import { SubmitButton } from "@/components/submit-button";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ChevronLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -12,7 +15,13 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
     <div className="w-full h-full flex flex-col justify-center items-center">
       {/* Email handler */}
       <form className="max-w-md  w-full flex flex-col">
-        <h1 className="text-2xl font-medium">Sign in</h1>
+        <Link href="/" className="mb-8 -mt-16">
+          <Button variant="ghost">
+            <ChevronLeft className="mr-2 h-5 w-5" />
+            Back to Home
+          </Button>
+        </Link>
+        <h1 className="text-2xl font-mont-medium">Sign in</h1>
         <p className="text-sm text-foreground">
           Don't have an account?{" "}
           <Link

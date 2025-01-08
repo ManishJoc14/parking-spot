@@ -1,13 +1,38 @@
-import HeaderAuth from "@/components/header-auth";
 import { ThemeSwitcher } from "@/components/theme-switcher";
-import { GeistSans } from "geist/font/sans";
 import { ThemeProvider } from "next-themes";
-import Link from "next/link";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
+import localFont from "next/font/local";
+import { Metadata } from "next";
 
-export const metadata = {
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
+const MontserratPrimary = localFont({
+  src: "./fonts/Montserrat-Regular.ttf",
+  variable: "--font-primary-regular",
+  weight: "100 900",
+});
+const MontserratBold = localFont({
+  src: "./fonts/Montserrat-Bold.ttf",
+  variable: "--font-primary-bold",
+  weight: "100 900",
+});
+const MontserratSemiBold = localFont({
+  src: "./fonts/Montserrat-SemiBold.ttf",
+  variable: "--font-primary-semibold",
+  weight: "100 900",
+});
+const MontserratMedium = localFont({
+  src: "./fonts/Montserrat-Medium.ttf",
+  variable: "--font-primary-medium",
+  weight: "100 900",
+});
+
+export const metadata: Metadata = {
+  title: {
+    template: "%s | Parkify",
+    default: "Parkify",
+  },
+  description: "The official Parkify website. Best Parking finder available.",
 };
 
 export default function RootLayout({
@@ -16,8 +41,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={GeistSans.className} suppressHydrationWarning>
-      <body className="bg-background text-foreground">
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={`${MontserratPrimary.variable} ${MontserratBold.variable}  ${MontserratSemiBold.variable} ${MontserratMedium.variable} antialiased bg-background text-foreground`}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -25,7 +52,8 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <div className="flex fixed right-4 top-4 z-10">
-            <HeaderAuth /> <ThemeSwitcher />
+            <ThemeSwitcher />
+            <ToastContainer />
           </div>
           {children}
         </ThemeProvider>

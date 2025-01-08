@@ -40,16 +40,11 @@ export const updateSession = async (request: NextRequest) => {
 
     // define protected routes
     const isProtectedRoute =
-      path.startsWith("/protected") || path.startsWith("notes");
+      path.startsWith("/protected") || path.startsWith("admin");
 
     // redirect unauthenticated users to sign-in page
     if (isProtectedRoute && user.error) {
       return NextResponse.redirect(new URL("/sign-in", request.url));
-    }
-
-    // redirect authenticated user to protected routes
-    if (request.nextUrl.pathname === "/" && !user.error) {
-      return NextResponse.redirect(new URL("/protected", request.url));
     }
 
     return response;
