@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { Icon } from "leaflet";
 import L from "leaflet";
@@ -67,6 +67,7 @@ export default function Map({ uuid, parking, userPosition }: MapProps) {
   return (
     <div className="relative w-full h-full">
       <MapContainer
+        // key={new Date().getTime()}
         center={userPosition}
         zoom={15}
         style={{ height: "100%", width: "100%" }}

@@ -379,3 +379,53 @@ export const isValidTime = (
 
   return true;
 };
+
+// Helper function to convert camelCase to snake_case
+function convertCamelToSnake(key: string): string {
+  return key
+    .replace(/([a-z]|(?:[A-Z0-9]+))([A-Z0-9]|$)/g, function (_, $1, $2) {
+      return $1 + ($2 && "_" + $2);
+    })
+    .toLowerCase();
+}
+
+// Function to convert object or array from camelCase keys to snake_case keys
+export const convertObjectKeysToSnakeCase = (input: any): any => {
+  if (Array.isArray(input)) {
+    // If input is an array, process each element recursively
+    return input.map((item) => convertObjectKeysToSnakeCase(item));
+  } else if (input && typeof input === "object") {
+    // If input is an object, process its keys
+    const snakeCasedObject: Record<string, any> = {};
+    for (const key in input) {
+      const snakeKey = convertCamelToSnake(key);
+      snakeCasedObject[snakeKey] = convertObjectKeysToSnakeCase(input[key]);
+    }
+    return snakeCasedObject;
+  }
+  // If input is neither an object nor an array, return it as-is
+  return input;
+};
+
+// Helper function to convert snake_case to camelCase
+function convertSnakeToCamel(key: string): string {
+  return key.replace(/_([a-z0-9])/g, (_, letter) => letter.toUpperCase());
+}
+
+// Function to convert object or array from snake_case keys to camelCase keys
+export const convertObjectKeysToCamelCase = (input: any): any => {
+  if (Array.isArray(input)) {
+    // If input is an array, process each element recursively
+    return input.map((item) => convertObjectKeysToCamelCase(item));
+  } else if (input && typeof input === "object") {
+    // If input is an object, process its keys
+    const camelCasedObject: Record<string, any> = {};
+    for (const key in input) {
+      const camelKey = convertSnakeToCamel(key);
+      camelCasedObject[camelKey] = convertObjectKeysToCamelCase(input[key]);
+    }
+    return camelCasedObject;
+  }
+  // If input is neither an object nor an array, return it as-is
+  return input;
+};
