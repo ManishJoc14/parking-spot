@@ -315,10 +315,10 @@ export default function SearchPage() {
               }
             >
               <div className="space-y-4 gap-4 overflow-y-hidden">
-                {parkings.map((parking) => (
+                {parkings.map((parking, i) => (
                   <ParkingCard
                     id={undefined}
-                    key={parking.uuid}
+                    key={i}
                     parking={parking}
                   />
                 ))}

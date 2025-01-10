@@ -49,7 +49,8 @@ export interface Feedback {
 }
 
 export interface ParkingLocation {
-  uuid: string;
+  id: number; // unique id of each parking location
+  uuid: string; // non-unique uuid of each parking spot (i.e one parking spot can have multiple parking locations)
   name: string;
   coverImage: string;
   description: string;

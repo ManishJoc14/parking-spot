@@ -44,22 +44,41 @@ export async function GET(req: Request) {
   // Fetch parking spot data with pagination and ordering
   const { data, error } = await supabase
     .from("parking_spots")
-    .select(
-      "uuid, name, cover_image, description, address, rate_per_hour, rate_per_day, latitude, longitude, total_reviews, postcode, average_rating"
-    )
+    .select(`
+        id, uuid, name, cover_image, description, address, rate_per_hour, rate_per_day, latitude, longitude, postcode,
+        parking_spot_reviews (
+          id, rating
+        )
+      `)
     .order(ordering, orderingtype) // Sorting
-    .range(offset, offset + limit - 1); // Pagination
+    .range(offset, offset + limit - 1); // Pagination 
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
+  // Process `parkingSpots` to calculate `total_reviews` and `average_rating`
+  const enrichedData = data.map((spot) => {
+    const reviews = spot.parking_spot_reviews || [];
+    const total_reviews = reviews.length;
+    const average_rating =
+      total_reviews > 0
+        ? reviews.reduce((sum, review) => sum + review.rating, 0) / total_reviews
+        : 0;
+
+    return {
+      ...spot,
+      total_reviews,
+      average_rating,
+    };
+  });
+
   // Convert keys to camelCase
-  const results = convertObjectKeysToCamelCase(data);
+  const results = convertObjectKeysToCamelCase(enrichedData);
 
   // Calculate pagination URLs
-  const nextOffset = offset + limit < count ? offset + limit : null;
-  const previousOffset = offset - limit >= 0 ? offset - limit : null;
+  const nextOffset = offset + limit + 1 < count ? (offset + limit + 1) : null;
+  const previousOffset = offset - limit - 1 >= 0 ? (offset - limit - 1) : null;
 
   const res = {
     count, // Total count of parking spots
