@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -19,6 +19,9 @@ import {
 import { Star } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { createClient } from "@/utils/supabase/client";
+import { User } from "@supabase/supabase-js";
+import { useRouter } from "next/navigation";
 
 const reviewSchema = z.object({
   rating: z.number().int().min(1).max(5),
@@ -32,12 +35,16 @@ type ReviewFormData = z.infer<typeof reviewSchema>;
 
 export default function ParkingSpotReviewForm({
   parkingSpotId,
+  parkingSpotUuid,
   refresh,
 }: {
   parkingSpotId: number;
+  parkingSpotUuid: string;
   refresh: () => void;
 }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const router = useRouter();
 
   const form = useForm<ReviewFormData>({
     resolver: zodResolver(reviewSchema),
@@ -47,8 +54,27 @@ export default function ParkingSpotReviewForm({
     },
   });
 
+
+  useEffect(() => {
+    async function fetchUser() {
+      const res = await axiosInstance.get("/auth");
+      setUser(res.data);
+    }
+    fetchUser();
+  }, []);
+
+
   const onSubmit = async (data: ReviewFormData) => {
     setIsSubmitting(true);
+
+    if (!user) {
+      toast.error("Please login to book a parking spot");
+      setIsSubmitting(false);
+      localStorage.setItem("redirectBackToParking", `/parking/${parkingSpotUuid}`);
+      router.push("/login");
+      return;
+    }
+
     try {
       const res = await axiosInstance.post(
         "/public/parking-app/parking-spots/create-review",
@@ -58,7 +84,7 @@ export default function ParkingSpotReviewForm({
         },
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            user_uuid: user?.id || "",
           },
         }
       );
@@ -94,11 +120,10 @@ export default function ParkingSpotReviewForm({
                       {[1, 2, 3, 4, 5].map((star) => (
                         <Star
                           key={star}
-                          className={`w-6 h-6 cursor-pointer ${
-                            star <= field.value
-                              ? "text-yellow-400 fill-yellow-400"
-                              : "text-gray-300"
-                          }`}
+                          className={`w-6 h-6 cursor-pointer ${star <= field.value
+                            ? "text-yellow-400 fill-yellow-400"
+                            : "text-gray-300"
+                            }`}
                           onClick={() => field.onChange(star)}
                         />
                       ))}

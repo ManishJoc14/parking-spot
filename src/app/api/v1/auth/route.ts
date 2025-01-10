@@ -6,7 +6,12 @@ export async function GET() {
 
   const {
     data: { user },
+    error
   } = await supabase.auth.getUser();
 
-  return NextResponse.json(user);
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  return NextResponse.json(user, { status: 200 });
 }

@@ -40,7 +40,7 @@ export async function GET(
                 end_time
             ),
             reviews:parking_spot_reviews(
-                users:reviewer(uuid, full_name, photo),
+                reviewer:users(uuid, full_name, photo),
                 rating,
                 comments,
                 created_at

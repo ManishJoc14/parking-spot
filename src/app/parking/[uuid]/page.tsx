@@ -22,6 +22,7 @@ import clsx from "clsx";
 import { getDayInNumber, timeAgo } from "@/lib/utils";
 import BookingForm from "@/components/parkingComponents/booking-form";
 import ParkingSpotReviewForm from "@/components/parkingComponents/create-review-form";
+import { createClient } from "@/utils/supabase/client";
 
 const GetVehicleTypeIcon = ({ vehicleType }: { vehicleType: VehicleType }) => {
   switch (vehicleType) {
@@ -221,7 +222,7 @@ export default function ParkingBookingPage() {
                             <GetFeatureTypeIcon
                               parkingFeature={
                                 ParkingFeature[
-                                  feat.feature as keyof typeof ParkingFeature
+                                feat.feature as keyof typeof ParkingFeature
                                 ] || feat.feature
                               }
                             />
@@ -269,7 +270,7 @@ export default function ParkingBookingPage() {
                         <div className="flex flex-col gap-4 justify-start">
                           {parkingDetailed.reviews.map((review, index) => (
                             <Card
-                              key={review.reviewer.uuid + index}
+                              key={review?.reviewer?.uuid + index}
                               className="w-full order-2 mx-auto shadow-none border-none relative"
                             >
                               <CardContent className="p-0 z-10 bg-white hover:bg-gray-100 py-2 transition-all relative rounded-lg">
@@ -277,9 +278,9 @@ export default function ParkingBookingPage() {
                                   <div className="flex flex-col gap-2 sm:flex-row items-center space-y-2">
                                     {/* IMAGE */}
                                     <div className="relative h-16 w-16 flex-shrink-0">
-                                      {review.reviewer.photo ? (
+                                      {review?.reviewer?.photo ? (
                                         <Image
-                                          src={review.reviewer.photo}
+                                          src={review?.reviewer?.photo}
                                           alt={"User"}
                                           fill
                                           className="rounded-full object-cover"
@@ -302,24 +303,23 @@ export default function ParkingBookingPage() {
                                         {[1, 2, 3, 4, 5].map((star) => (
                                           <Star
                                             key={star}
-                                            className={`h-5 w-5 ${
-                                              star <= Math.floor(review.rating)
-                                                ? "fill-yellow-400 text-yellow-400"
-                                                : "fill-gray-200 text-gray-200"
-                                            }`}
+                                            className={`h-5 w-5 ${star <= Math.floor(review?.rating)
+                                              ? "fill-yellow-400 text-yellow-400"
+                                              : "fill-gray-200 text-gray-200"
+                                              }`}
                                           />
                                         ))}
                                       </div>
                                       <h3 className="font-mont-medium">
-                                        {review.reviewer.fullName ||
+                                        {review?.reviewer?.fullName ||
                                           "Anonymous"}
                                       </h3>
 
                                       <p className="text-xs text-gray-400">
-                                        {timeAgo(review.createdAt)}
+                                        {timeAgo(review?.createdAt)}
                                       </p>
                                       <p className="text-gray-600 tracking-light mt-2 text-md ">
-                                        {review.comments}
+                                        {review?.comments}
                                       </p>
                                     </div>
                                   </div>
@@ -337,6 +337,7 @@ export default function ParkingBookingPage() {
                         </div>
                         <br />
                         <ParkingSpotReviewForm
+                          parkingSpotUuid={uuid as string}
                           parkingSpotId={parkingDetailed.id}
                           refresh={refresh}
                         />
