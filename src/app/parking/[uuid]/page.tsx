@@ -117,7 +117,7 @@ export default function ParkingBookingPage() {
     <div className="min-h-screen bg-gray-50">
       {/* Cover Image section START */}
       <div className="relative w-full h-[70vh]">
-        {parkingDetailed.coverImage ? (
+        {/* {parkingDetailed.coverImage ? (
           <Image
             src={parkingDetailed.coverImage}
             alt={parkingDetailed?.name}
@@ -127,7 +127,10 @@ export default function ParkingBookingPage() {
           />
         ) : (
           <div className="h-full min-w-[100px] w-full bg-gray-100"></div>
-        )}
+        )} */}
+        {/* FIXME  -- src has /path-to-image1 */}
+        <div className="h-full min-w-[100px] w-full bg-gray-100"></div>
+
         <div className="absolute inset-0 bg-black bg-opacity-40 flex items-end">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <h1 className="text-4xl font-mont-bold text-white mb-2">
@@ -216,10 +219,16 @@ export default function ParkingBookingPage() {
                             className="flex items-center bg-gray-100 hover:bg-gray-200 transition-all rounded-lg p-4"
                           >
                             <GetFeatureTypeIcon
-                              parkingFeature={feat.feature as ParkingFeature}
+                              parkingFeature={
+                                ParkingFeature[
+                                  feat.feature as keyof typeof ParkingFeature
+                                ] || feat.feature
+                              }
                             />
                             <span className="text-sm  pl-1">
-                              {feat.feature}
+                              {ParkingFeature[
+                                feat.feature as keyof typeof ParkingFeature
+                              ] || feat.feature}
                             </span>
                           </div>
                         ))}
@@ -356,10 +365,10 @@ export default function ParkingBookingPage() {
 
           {/* BOOKING FORM  */}
           <div>
-            <BookingForm
+            {/* <BookingForm
               id={parkingDetailed.id}
               parkingDetailed={parkingDetailed}
-            />
+            /> */}
           </div>
         </div>
       </div>

@@ -120,11 +120,13 @@ export interface ParkingDetailed {
   features: {
     feature: string;
   }[];
+  
   availabilities: {
     day: string;
     startTime: string;
     endTime: string;
   }[];
+
   reviews: {
     reviewer: {
       uuid: string;
