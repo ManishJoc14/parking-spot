@@ -12,6 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { ParkingFeature, VehicleType } from "@/types/definitions";
+import { v4 as uuidv4 } from "uuid";
 
 interface FiltersDialogProps {
   setActiveFilters?: (filters: {
@@ -75,7 +76,7 @@ export function FiltersDialog({ setActiveFilters }: FiltersDialogProps) {
               <div className="grid grid-cols-2 gap-4">
                 {Object.entries(VehicleType).map(([key, value]) => (
                   <div
-                    key={key}
+                    key={uuidv4()}
                     className="flex items-center space-x-2 cursor-pointer"
                   >
                     <Checkbox
@@ -110,7 +111,7 @@ export function FiltersDialog({ setActiveFilters }: FiltersDialogProps) {
               <div className="grid grid-cols-2 gap-4">
                 {Object.entries(ParkingFeature).map(([key, value]) => (
                   <div
-                    key={key}
+                    key={uuidv4()}
                     className="flex items-center space-x-2 cursor-pointer"
                   >
                     <Checkbox

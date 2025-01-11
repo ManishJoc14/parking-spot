@@ -1,4 +1,5 @@
 import { Calculator, Timer, Wallet } from "lucide-react";
+import { v4 as uuidv4 } from "uuid";
 
 export default function Benefits() {
   const benefits = [
@@ -48,9 +49,9 @@ export default function Benefits() {
       </div>
 
       <div className="grid mx-auto mt-20 grid-cols-1 gap-8 sm:gap-12 sm:grid-cols-3 max-w-4xl">
-        {benefits.map((benefit, index) => (
+        {benefits.map((benefit) => (
           <div
-            key={index}
+            key={uuidv4()}
             className="flex flex-col items-center text-center space-y-2"
           >
             <div className="flex items-center justify-center h-12 w-12  sm:h-16 sm:w-16 rounded-full bg-primary">

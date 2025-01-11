@@ -5,6 +5,7 @@ import {
 } from "@/components/adminComponents/manageParkingSpots/buttons";
 import { formatCurrency } from "@/lib/utils";
 import { AdminParkingSpot } from "@/types/definitions";
+import { v4 as uuidv4 } from "uuid";
 
 export default function ParkingSpotsTable({
   data,
@@ -25,7 +26,7 @@ export default function ParkingSpotsTable({
           <div className="md:hidden">
             {data?.map((spot) => (
               <div
-                key={spot.id}
+                key={uuidv4()}
                 className="mb-2 w-full rounded-md bg-white p-4"
               >
                 <div className="flex items-center justify-between border-b pb-4">
@@ -72,7 +73,7 @@ export default function ParkingSpotsTable({
               <tr>
                 {headers.map((header) => (
                   <th
-                    key={header.key}
+                    key={uuidv4()}
                     scope="col"
                     className="px-4 py-5 font-mont-semibold sm:pl-6"
                   >
@@ -87,7 +88,7 @@ export default function ParkingSpotsTable({
             <tbody className="bg-white font-mont-medium">
               {data?.map((spot) => (
                 <tr
-                  key={spot.id}
+                  key={uuidv4()}
                   className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                 >
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">

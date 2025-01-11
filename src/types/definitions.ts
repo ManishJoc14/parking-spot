@@ -120,7 +120,7 @@ export interface ParkingDetailed {
   features: {
     feature: string;
   }[];
-  
+
   availabilities: {
     day: string;
     startTime: string;
@@ -154,10 +154,13 @@ export enum PaymentStatus {
 export interface BookingResponse {
   message: string;
   bookingNo: string;
+  vehicleNo: string;
+  vehicle: VehicleType;
   status: BookingStatus;
   startTime: string;
   endTime: string;
   paymentStatus: PaymentStatus;
+  amount: number;
 }
 
 export interface Booking {
@@ -167,9 +170,9 @@ export interface Booking {
   startTime: string;
   endTime: string;
   amount: string;
-  paymentStatus: string;
+  paymentStatus: PaymentStatus;
   vehicleNo: string;
-  vehicle: string;
+  vehicle: VehicleType;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;

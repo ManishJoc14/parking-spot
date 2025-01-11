@@ -1,4 +1,5 @@
 import { Search, Ticket, User, Wallet } from "lucide-react";
+import { v4 as uuidv4 } from "uuid";
 
 export default function HowItWorks() {
   const steps = [
@@ -52,8 +53,8 @@ export default function HowItWorks() {
         {/* Right Side: Steps */}
         <div className="px-4 sm:px-8">
           <div className="space-y-4 divide-y divide-green-400 divide-dashed">
-            {steps.map((step, index) => (
-              <div key={index} className="flex items-center space-x-4 py-6">
+            {steps.map((step) => (
+              <div key={uuidv4()} className="flex items-center space-x-4 py-6">
                 <div className="flex items-center bg-transparent justify-center h-16 w-16 rounded-xl sm:bg-secondary text-white text-lg font-bold">
                   <span className="bg-primary p-2 rounded-full">
                     {step.icon}

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { v4 as uuidv4 } from "uuid";
 
 interface DateTimePickerProps {
   value?: Date
@@ -62,7 +63,7 @@ export function DateTimePicker({ value, onChange, className }: DateTimePickerPro
             </SelectTrigger>
             <SelectContent>
               {times.map((time) => (
-                <SelectItem key={time} value={time}>
+                <SelectItem key={uuidv4()} value={time}>
                   {time}
                 </SelectItem>
               ))}

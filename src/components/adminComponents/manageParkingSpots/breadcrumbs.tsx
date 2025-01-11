@@ -1,5 +1,6 @@
 import { clsx } from "clsx";
 import Link from "next/link";
+import { v4 as uuidv4 } from "uuid";
 
 interface Breadcrumb {
   label: string;
@@ -17,7 +18,7 @@ export default function Breadcrumbs({
       <ol className="flex text-xl font-mont-medium md:text-2xl">
         {breadcrumbs.map((breadcrumb, index) => (
           <li
-            key={breadcrumb.href}
+            key={uuidv4()}
             aria-current={breadcrumb.active}
             className={clsx(
               breadcrumb.active ? "text-gray-800" : "text-gray-500"

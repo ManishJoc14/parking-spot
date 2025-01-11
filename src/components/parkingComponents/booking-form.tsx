@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { ParkingDetailed, VehicleType } from "@/types/definitions";
+import { ParkingDetailed, User, VehicleType } from "@/types/definitions";
 import {
   calculateAmount,
   generateParkingToken,
@@ -21,8 +21,8 @@ import {
 import axiosInstance from "@/lib/axiosInstance";
 import { toast } from "react-toastify";
 import Image from "next/image";
-import { useAuth } from "@/context/authContext";
 import { useParams, useRouter } from "next/navigation";
+import { v4 as uuidv4 } from "uuid";
 
 export interface BookingFormProps {
   id: number;
@@ -35,7 +35,7 @@ export default function BookingForm({ id, parkingDetailed }: BookingFormProps) {
     defaultStartTime.getTime() + 2 * 60 * 60 * 1000
   );
 
-  const { user, fetchUser } = useAuth();
+  const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
   const { uuid } = useParams();
 
@@ -44,7 +44,7 @@ export default function BookingForm({ id, parkingDetailed }: BookingFormProps) {
 
   const [formState, setFormState] = useState({
     parkingSpot: id,
-    amount: "0",
+    amount: 0,
     startTime: defaultStartTime.toISOString(),
     endTime: defaultEndTime.toISOString(),
     vehicle: "",
@@ -53,6 +53,14 @@ export default function BookingForm({ id, parkingDetailed }: BookingFormProps) {
 
   const [isBookingSuccess, setIsBookingSuccess] = useState(false);
   const [tokenImage, setTokenImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchUser() {
+      const res = await axiosInstance.get("/auth");
+      setUser(res.data);
+    }
+    fetchUser();
+  }, []);
 
   const openDateTimePicker = (inputRef: React.RefObject<HTMLInputElement>) => {
     if (inputRef.current) {
@@ -74,23 +82,11 @@ export default function BookingForm({ id, parkingDetailed }: BookingFormProps) {
         parkingDetailed,
         updatedState.startTime,
         updatedState.endTime
-      ) as string;
+      ) as number;
     }
 
     setFormState(updatedState);
   };
-
-  useEffect(() => {
-    if (user) return;
-    if (
-      !(
-        localStorage.getItem("accessToken") &&
-        localStorage.getItem("refreshToken")
-      )
-    )
-      return;
-    fetchUser();
-  }, [fetchUser, user]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -123,7 +119,7 @@ export default function BookingForm({ id, parkingDetailed }: BookingFormProps) {
         },
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            user_uuid: user?.id || "",
           },
         }
       );
@@ -131,10 +127,7 @@ export default function BookingForm({ id, parkingDetailed }: BookingFormProps) {
       if (res.status === 201) {
         toast.success("Parking spot booked successfully");
         const tokenImage = generateParkingToken(
-          res.data,
-          formState.amount,
-          formState.vehicleNo,
-          formState.vehicle as VehicleType
+          res.data
         );
 
         setTokenImage(tokenImage);
@@ -216,8 +209,8 @@ export default function BookingForm({ id, parkingDetailed }: BookingFormProps) {
                   <SelectContent>
                     {parkingDetailed.vehiclesCapacity.map((vehicle) => (
                       <SelectItem
-                        key={getVehicleTypeKey(vehicle.vehicleType)}
-                        value={getVehicleTypeKey(vehicle.vehicleType) || ""}
+                        key={uuidv4()}
+                        value={vehicle.vehicleType as VehicleType}
                       >
                         {vehicle.vehicleType}
                         {vehicle.capacity > 0
@@ -259,6 +252,6 @@ export default function BookingForm({ id, parkingDetailed }: BookingFormProps) {
           )}
         </form>
       </CardContent>
-    </Card>
+    </Card >
   );
 }

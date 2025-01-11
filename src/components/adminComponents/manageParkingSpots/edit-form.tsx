@@ -25,6 +25,7 @@ import { useRouter } from "next/navigation";
 import { Trash2 } from "lucide-react";
 import MapInAdminPage from "./mapInAdminPage";
 import CreateFormSkeleton from "../skeletons";
+import { v4 as uuidv4 } from "uuid";
 
 export default function EditParkingSpotForm({
   parkingSpotId,
@@ -354,7 +355,7 @@ export default function EditParkingSpotForm({
             <h3 className="text-lg font-mont-bold">Features</h3>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {Object.entries(ParkingFeature).map(([key, value]) => (
-                <div key={key} className="flex items-center space-x-2">
+                <div key={uuidv4()} className="flex items-center space-x-2">
                   <Checkbox
                     id={key}
                     checked={featureFields.some((f) => f.feature === key)}
@@ -397,7 +398,7 @@ export default function EditParkingSpotForm({
             <h3 className="text-lg font-mont-bold">Availabilities</h3>
             {availabilityFields.map((field, index) => (
               <div
-                key={field.id}
+                key={uuidv4()}
                 className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end"
               >
                 <div className="space-y-2">
@@ -420,7 +421,7 @@ export default function EditParkingSpotForm({
                         </SelectTrigger>
                         <SelectContent>
                           {Object.entries(DayOfWeek).map(([key, value]) => (
-                            <SelectItem key={key} value={key}>
+                            <SelectItem key={uuidv4()} value={key}>
                               {value}
                             </SelectItem>
                           ))}
@@ -510,9 +511,9 @@ export default function EditParkingSpotForm({
           {/* Vehicles Capacity */}
           <div className="space-y-4">
             <h3 className="text-lg font-mont-bold">Vehicles Capacity</h3>
-            {vehicleFields.map((field, index) => (
+            {vehicleFields.map((_, index) => (
               <div
-                key={field.id}
+                key={uuidv4()}
                 className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end"
               >
                 <div className="space-y-2">
@@ -535,7 +536,7 @@ export default function EditParkingSpotForm({
                         </SelectTrigger>
                         <SelectContent>
                           {Object.entries(VehicleType).map(([key, value]) => (
-                            <SelectItem key={key} value={key}>
+                            <SelectItem key={uuidv4()} value={key}>
                               {value}
                             </SelectItem>
                           ))}

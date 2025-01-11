@@ -13,14 +13,12 @@ export async function POST(request: Request) {
     const userUuid = request.headers.get('user_uuid');
     if (!userUuid) {
         return NextResponse.json({ error: 'User UUID not provided' }, { status: 400 });
-    }
-    // add reviewer field to review object
-    reviewToInsert.reviewer = userUuid;
+    };
 
     const supabase = await createClient();
     const { data, error } = await supabase
         .from("parking_spot_reviews")
-        .insert(reviewToInsert)
+        .insert({ ...reviewToInsert, reviewer: userUuid })
         .select("parking_spot, rating, comments")
         .single();
 

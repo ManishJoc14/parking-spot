@@ -1,6 +1,7 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { v4 as uuidv4 } from "uuid";
 
 export function ParkingTableRowSkeleton() {
   return (
@@ -84,7 +85,7 @@ export function ParkingsTableSkeleton() {
               <tr>
                 {headers.map((header) => (
                   <th
-                    key={header.key}
+                    key={uuidv4()}
                     scope="col"
                     className="px-4 py-5 font-medium sm:pl-6"
                   >
@@ -193,7 +194,7 @@ export function BookingsTableSkeleton() {
               <tr>
                 {headers.map((header) => (
                   <th
-                    key={header.key}
+                    key={uuidv4()}
                     scope="col"
                     className="px-4 py-5 font-medium sm:pl-6"
                   >
@@ -241,8 +242,8 @@ export default function CreateFormSkeleton() {
           <div className="space-y-4">
             <Skeleton className="h-6 w-32" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {[...Array(4)].map((_, i) => (
-                <div key={i} className="space-y-3">
+              {[...Array(4)].map((_) => (
+                <div key={uuidv4()} className="space-y-3">
                   <Skeleton className="h-4 w-24" />
                   <Skeleton className="h-10 w-full" />
                 </div>
@@ -262,8 +263,8 @@ export default function CreateFormSkeleton() {
           <div className="space-y-4">
             <Skeleton className="h-6 w-32" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {[...Array(2)].map((_, i) => (
-                <div key={i} className="space-y-2">
+              {[...Array(2)].map((_) => (
+                <div key={uuidv4()} className="space-y-2">
                   <Skeleton className="h-4 w-24" />
                   <Skeleton className="h-10 w-full" />
                 </div>
@@ -277,8 +278,8 @@ export default function CreateFormSkeleton() {
           <div className="space-y-4">
             <Skeleton className="h-6 w-32" />
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {[...Array(6)].map((_, i) => (
-                <div key={i} className="flex items-center space-x-2">
+              {[...Array(6)].map((_) => (
+                <div key={uuidv4()} className="flex items-center space-x-2">
                   <Skeleton className="h-4 w-4" />
                   <Skeleton className="h-4 w-24" />
                 </div>
@@ -291,10 +292,10 @@ export default function CreateFormSkeleton() {
           {/* Availabilities */}
           <div className="space-y-4">
             <Skeleton className="h-6 w-32" />
-            {[...Array(2)].map((_, i) => (
-              <div key={i} className="flex justify-between">
-                {[...Array(3)].map((_, j) => (
-                  <Skeleton key={j} className="h-10 w-56" />
+            {[...Array(2)].map((_) => (
+              <div key={uuidv4()} className="flex justify-between">
+                {[...Array(3)].map((_) => (
+                  <Skeleton key={uuidv4()} className="h-10 w-56" />
                 ))}
               </div>
             ))}
@@ -306,10 +307,10 @@ export default function CreateFormSkeleton() {
           {/* Vehicles Capacity */}
           <div className="space-y-4">
             <Skeleton className="h-6 w-32" />
-            {[...Array(2)].map((_, i) => (
-              <div key={i} className="flex justify-between">
+            {[...Array(2)].map(_ => (
+              <div key={uuidv4()} className="flex justify-between">
                 {[...Array(2)].map((_, j) => (
-                  <Skeleton key={j} className="h-10 w-56" />
+                  <Skeleton key={uuidv4()} className="h-10 w-56" />
                 ))}
               </div>
             ))}

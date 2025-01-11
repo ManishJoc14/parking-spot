@@ -5,6 +5,8 @@ import { HomeIcon, Settings, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
+import { v4 as uuidv4 } from "uuid";
+
 
 const links = [
   { name: "Bookings", href: "/admin/bookings", icon: HomeIcon },
@@ -28,7 +30,7 @@ export default function NavLinks() {
         const LinkIcon = link.icon;
         return (
           <Link
-            key={link.name}
+            key={uuidv4()}
             href={link.href}
             className={clsx(
               "flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-mont-medium hover:bg-primary/10 hover:text-primary transition-all md:flex-none md:justify-start md:p-2 md:px-3",

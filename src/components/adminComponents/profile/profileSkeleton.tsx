@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { v4 as uuidv4 } from "uuid";
 
 export function ProfileSkeleton() {
   return (
@@ -14,8 +15,8 @@ export function ProfileSkeleton() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {[...Array(6)].map((_, i) => (
-            <div key={i} className="space-y-2">
+          {[...Array(6)].map((_) => (
+            <div key={uuidv4()} className="space-y-2">
               <Skeleton className="h-4 w-20" />
               <Skeleton className="h-10 w-full" />
             </div>
@@ -37,8 +38,8 @@ export function ProfileSkeleton() {
         <div className="space-y-2">
           <Skeleton className="h-6 w-40" />
           <div className="grid grid-cols-2 gap-4">
-            {[...Array(4)].map((_, i) => (
-              <Skeleton key={i} className="h-4 w-full" />
+            {[...Array(4)].map((_) => (
+              <Skeleton key={uuidv4()} className="h-4 w-full" />
             ))}
           </div>
         </div>

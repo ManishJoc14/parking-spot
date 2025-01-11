@@ -5,6 +5,7 @@ import { ChevronRight, Facebook, Instagram, X, Youtube } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { v4 as uuidv4 } from "uuid";
 
 export default function Footer() {
   const [email, setEmail] = useState("");
@@ -71,9 +72,9 @@ export default function Footer() {
             experience today.
           </p>
           <div className="flex mt-4 space-x-4 flex-wrap">
-            {socialLinks.map((social, index) => (
+            {socialLinks.map((social) => (
               <Link
-                key={index}
+                key={uuidv4()}
                 href={social.href}
                 className="bg-slate-600 p-2 rounded-full text-white hover:scale-95 transition-all"
               >
@@ -89,8 +90,8 @@ export default function Footer() {
           <div className="min-w-fit">
             <h4 className="text-white text-lg font-mont-semibold">Company</h4>
             <ul className="mt-2 space-y-2">
-              {companyLinks.map((link, index) => (
-                <li key={index}>
+              {companyLinks.map((link) => (
+                <li key={uuidv4()}>
                   <Link href={link.href} className="hover:text-primary">
                     {link.label}
                   </Link>
@@ -103,8 +104,8 @@ export default function Footer() {
           <div>
             <h4 className="text-white text-lg font-mont-semibold">Contact</h4>
             <ul className="mt-2 space-y-2 text-sm">
-              {contactDetails.map((detail, index) => (
-                <li key={index} className="text-nowrap">
+              {contactDetails.map((detail) => (
+                <li key={uuidv4()} className="text-nowrap">
                   {detail.content}{" "}
                   {detail.link && (
                     <Link

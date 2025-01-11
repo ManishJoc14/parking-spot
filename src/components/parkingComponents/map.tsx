@@ -5,6 +5,7 @@ import Map, { Marker, Popup, ScaleControl } from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
 import ParkingCard from "./parking-card";
 import { ParkingLocation, ParkingDetailed } from "@/types/definitions";
+import { v4 as uuidv4 } from "uuid";
 
 interface MapProps {
   uuid: string | undefined;
@@ -46,7 +47,7 @@ export default function MapComponent({
         {/* Parking Markers */}
         {parking.map((location, index) => (
           <Marker
-            key={index}
+            key={uuidv4()}
             latitude={location.latitude}
             longitude={location.longitude}
             onClick={(e) => {

@@ -19,9 +19,9 @@ import {
 import { Star } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { createClient } from "@/utils/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
+import { v4 as uuidv4 } from "uuid";
 
 const reviewSchema = z.object({
   rating: z.number().int().min(1).max(5),
@@ -119,7 +119,7 @@ export default function ParkingSpotReviewForm({
                     <div className="flex items-center space-x-2">
                       {[1, 2, 3, 4, 5].map((star) => (
                         <Star
-                          key={star}
+                          key={uuidv4()}
                           className={`w-6 h-6 cursor-pointer ${star <= field.value
                             ? "text-yellow-400 fill-yellow-400"
                             : "text-gray-300"

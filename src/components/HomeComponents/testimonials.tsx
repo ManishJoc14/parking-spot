@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight, Star, User } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import axiosInstance from "@/lib/axiosInstance";
 import { Feedback } from "@/types/definitions";
+import { v4 as uuidv4 } from "uuid";
 
 export default function Testimonials() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -93,7 +94,7 @@ export default function Testimonials() {
             {/* <div className="flex -space-x-4">
               {testimonials.map((testimonial, index) => (
                 <div
-                  key={index}
+                  key={uuidv4()}
                   className="relative h-16 w-16 overflow-hidden border-2 rounded-full"
                 >
                   <Image
@@ -109,7 +110,7 @@ export default function Testimonials() {
               <span className="font-semibold"></span>
               {[1, 2, 3, 4, 5].map((star) => (
                 <Star
-                  key={star}
+                  key={uuidv4()}
                   className={`h-6 w-6 ${
                     star <= Math.floor(calculateAverageRating())
                       ? "fill-yellow-400 text-yellow-400"
@@ -149,7 +150,7 @@ export default function Testimonials() {
                       <div className="flex gap-1 mt-1">
                         {[1, 2, 3, 4, 5].map((star) => (
                           <Star
-                            key={star}
+                            key={uuidv4()}
                             className={`h-6 w-6 ${
                               star <= testimonials[currentIndex].rating
                                 ? "fill-yellow-400 text-yellow-400"

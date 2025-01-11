@@ -27,6 +27,7 @@ import axiosInstance from "@/lib/axiosInstance";
 import ParkingCardSkeleton from "@/components/skeletons/parking-card-skeleton";
 import InfiniteScroll from "react-infinite-scroll-component";
 import clsx from "clsx";
+import { v4 as uuidv4 } from "uuid";
 
 // Dynamically import the Map component
 const Map = dynamic(() => import("@/components/parkingComponents/map"), {
@@ -161,8 +162,7 @@ export default function SearchPage() {
       try {
         const queryParams = GetQueryParams();
         const res = await axiosInstance.get(
-          `/public/parking-app/parking-spots?${queryParams.toString()}&limit=${limit}&offset=${
-            offset.current
+          `/public/parking-app/parking-spots?${queryParams.toString()}&limit=${limit}&offset=${offset.current
           }`
         );
         setParkings(res.data.results);
@@ -220,7 +220,7 @@ export default function SearchPage() {
                   tabIndex={-1}
                 >
                   {suggestions.map((suggestion, index) => (
-                    <Fragment key={index}>
+                    <Fragment key={uuidv4()}>
                       <p
                         onClick={() => handleSuggestionClick(suggestion)}
                         className={clsx(
@@ -315,10 +315,10 @@ export default function SearchPage() {
               }
             >
               <div className="space-y-4 gap-4 overflow-y-hidden">
-                {parkings.map((parking, i) => (
+                {parkings.map((parking) => (
                   <ParkingCard
                     id={undefined}
-                    key={i}
+                    key={uuidv4()}
                     parking={parking}
                   />
                 ))}

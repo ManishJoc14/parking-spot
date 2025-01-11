@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import HeaderAuth from "../authComponents/header-auth-client";
+import { v4 as uuidv4 } from "uuid";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,7 +31,7 @@ export default function Header() {
         <nav className="hidden md:flex items-center space-x-6">
           {navLinks.map((link) => (
             <Link
-              key={link.href}
+              key={uuidv4()}
               href={link.href}
               className="text-sm font-mont-medium text-white hover:text-primary transition-colors"
             >
@@ -56,7 +57,7 @@ export default function Header() {
             <div className="flex flex-col space-y-4 mt-6">
               {navLinks.map((link) => (
                 <Link
-                  key={link.href}
+                  key={uuidv4()}
                   href={link.href}
                   className="text-sm font-mont-medium text-white hover:text-primary transition-colors"
                   onClick={() => setIsOpen(false)}

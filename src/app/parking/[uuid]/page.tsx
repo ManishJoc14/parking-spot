@@ -10,6 +10,7 @@ import {
   VehicleType,
   ParkingDetailed,
   ParkingFeature,
+  DayOfWeek,
 } from "@/types/definitions";
 import Link from "next/link";
 import Map from "@/components/parkingComponents/map";
@@ -22,7 +23,8 @@ import clsx from "clsx";
 import { getDayInNumber, timeAgo } from "@/lib/utils";
 import BookingForm from "@/components/parkingComponents/booking-form";
 import ParkingSpotReviewForm from "@/components/parkingComponents/create-review-form";
-import { createClient } from "@/utils/supabase/client";
+import { v4 as uuidv4 } from "uuid";
+
 
 const GetVehicleTypeIcon = ({ vehicleType }: { vehicleType: VehicleType }) => {
   switch (vehicleType) {
@@ -112,7 +114,6 @@ export default function ParkingBookingPage() {
   if (!parkingDetailed) {
     return <LoadingSpinner />;
   }
-  console.log("rendereing booking Page");
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -196,9 +197,9 @@ export default function ParkingBookingPage() {
                       </h3>
                       <div className="grid sm:grid-cols-2 gap-4">
                         {parkingDetailed.vehiclesCapacity.map(
-                          (vehicle, index) => (
+                          (vehicle) => (
                             <div
-                              key={index}
+                              key={uuidv4()}
                               className="flex items-center bg-gray-100 hover:bg-gray-200 transition-all rounded-lg p-4"
                             >
                               <GetVehicleTypeIcon
@@ -216,7 +217,7 @@ export default function ParkingBookingPage() {
                       <div className="grid sm:grid-cols-2 gap-4">
                         {parkingDetailed.features.map((feat, index) => (
                           <div
-                            key={index}
+                            key={uuidv4()}
                             className="flex items-center bg-gray-100 hover:bg-gray-200 transition-all rounded-lg p-4"
                           >
                             <GetFeatureTypeIcon
@@ -237,14 +238,14 @@ export default function ParkingBookingPage() {
                     </TabsContent>
                     <TabsContent value="availability">
                       <div className="grid sm:grid-cols-2 gap-4">
-                        {parkingDetailed.availabilities.map((slot, index) => (
+                        {parkingDetailed.availabilities.map((slot) => (
                           <div
-                            key={index}
+                            key={uuidv4()}
                             className={clsx(
                               "flex flex-col justify-center bg-gray-100 hover:bg-gray-200 transition-all rounded-lg p-4",
                               {
                                 "bg-green-300":
-                                  getDayInNumber(slot.day) ===
+                                  getDayInNumber(DayOfWeek[slot.day as keyof typeof DayOfWeek]) ===
                                   new Date().getDay(),
                               }
                             )}
@@ -252,7 +253,7 @@ export default function ParkingBookingPage() {
                             <div className="flex items-center mt-1">
                               <Calendar className="w-5 h-5 mr-2 text-primary" />
                               <span className="text-lg font-mont-medium">
-                                {slot.day}
+                                {DayOfWeek[slot.day as keyof typeof DayOfWeek]}
                               </span>
                             </div>
                             <div className="flex items-center mt-1">
@@ -270,7 +271,7 @@ export default function ParkingBookingPage() {
                         <div className="flex flex-col gap-4 justify-start">
                           {parkingDetailed.reviews.map((review, index) => (
                             <Card
-                              key={review?.reviewer?.uuid + index}
+                              key={uuidv4()}
                               className="w-full order-2 mx-auto shadow-none border-none relative"
                             >
                               <CardContent className="p-0 z-10 bg-white hover:bg-gray-100 py-2 transition-all relative rounded-lg">
@@ -302,7 +303,7 @@ export default function ParkingBookingPage() {
                                       <div className="flex">
                                         {[1, 2, 3, 4, 5].map((star) => (
                                           <Star
-                                            key={star}
+                                            key={uuidv4()}
                                             className={`h-5 w-5 ${star <= Math.floor(review?.rating)
                                               ? "fill-yellow-400 text-yellow-400"
                                               : "fill-gray-200 text-gray-200"
@@ -366,10 +367,10 @@ export default function ParkingBookingPage() {
 
           {/* BOOKING FORM  */}
           <div>
-            {/* <BookingForm
+            <BookingForm
               id={parkingDetailed.id}
               parkingDetailed={parkingDetailed}
-            /> */}
+            />
           </div>
         </div>
       </div>

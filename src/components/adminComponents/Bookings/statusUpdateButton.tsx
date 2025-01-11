@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/select";
 import axiosInstance from "@/lib/axiosInstance";
 import { getBookingKey } from "@/lib/utils";
+import { v4 as uuidv4 } from "uuid";
 
 export default function StatusUpdateButton({
   booking,
@@ -55,7 +56,7 @@ export default function StatusUpdateButton({
       <SelectContent>
         {Object.keys(BookingStatus).map((statusOption) => (
           <SelectItem
-            key={statusOption}
+            key={uuidv4()}
             value={statusOption as keyof typeof BookingStatus}
           >
             {BookingStatus[statusOption as keyof typeof BookingStatus]}

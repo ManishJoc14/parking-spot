@@ -4,6 +4,7 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
+import { v4 as uuidv4 } from "uuid";
 
 export default function FAQ() {
   const faqs = [
@@ -59,7 +60,7 @@ export default function FAQ() {
         className="space-y-4 py-6 max-w-4xl mx-auto"
       >
         {faqs.map((faq, index) => (
-          <AccordionItem key={index} value={`faq-${index}`}>
+          <AccordionItem key={uuidv4()} value={`faq-${index}`}>
             <AccordionTrigger className=" text-md sm:text-xl font-medium text-secondary-foreground">
               {faq.question}
             </AccordionTrigger>

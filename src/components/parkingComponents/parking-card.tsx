@@ -4,6 +4,7 @@ import { Star } from "lucide-react";
 import { ParkingDetailed, ParkingLocation } from "@/types/definitions";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import { v4 as uuidv4 } from "uuid";
 
 const ParkingCard = ({
   id,
@@ -46,7 +47,7 @@ const ParkingCard = ({
           <div className="flex items-center gap-1 mb-2">
             {[1, 2, 3, 4, 5].map((star) => (
               <Star
-                key={star}
+                key={uuidv4()}
                 className={`h-3 w-3 ${
                   star <= Math.floor(parking.averageRating)
                     ? "fill-yellow-400 text-yellow-400"
