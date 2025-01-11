@@ -12,13 +12,20 @@ export async function GET(req: Request) {
   const latitude = parseFloat(searchParams.get("latitude") || "0");
   const longitude = parseFloat(searchParams.get("longitude") || "0");
 
-  const ordering = searchParams.get("ordering") || "rate_per_hour"; // Default ordering
+  // Default ordering rate_per_hour ascending
+  // ordering variable is used for using in the next and previous of response 
+  let ordering = searchParams.get("ordering") || "rate_per_hour";
+
+  // NOTE -- we can sort by 
+  //   | "rate_per_hour"
+  //   | "-rate_per_hour"
+  //   | "average_rating"
+  //   | "-average_rating"
+  //   | "distance"
+  //   | "-distance";
 
   // Check if ordering is ascending or descending
-  const orderingtype =
-    searchParams.get("ordering")?.charAt(0) === "-"
-      ? { ascending: false }
-      : { ascending: true };
+  const isDescending = ordering.startsWith("-");
 
   // Fetch the total count of parking spots
   const { count, error: countError } = await supabase
@@ -42,43 +49,49 @@ export async function GET(req: Request) {
   }
 
   // Fetch parking spot data with pagination and ordering
-  const { data, error } = await supabase
+  let { data, error } = await supabase
     .from("parking_spots")
     .select(`
-        id, uuid, name, cover_image, description, address, rate_per_hour, rate_per_day, latitude, longitude, postcode,
-        parking_spot_reviews (
+        id, uuid, name, cover_image, description, address, rate_per_hour, rate_per_day, latitude, longitude, postcode, average_rating,
+        reviews:parking_spot_reviews (
           id, rating
-        )
-      `)
-    .order(ordering, orderingtype) // Sorting
+          )
+          `)
+    .order(
+      isDescending ? ordering.slice(1) : ordering, // remove "-" from column name if present in descending order
+      { ascending: !isDescending }) // Sorting
     .range(offset, offset + limit - 1); // Pagination 
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  // Process `parkingSpots` to calculate `total_reviews` and `average_rating`
-  const enrichedData = data.map((spot) => {
-    const reviews = spot.parking_spot_reviews || [];
-    const total_reviews = reviews.length;
-    const average_rating =
-      total_reviews > 0
-        ? reviews.reduce((sum, review) => sum + review.rating, 0) / total_reviews
-        : 0;
+  if (!data) {
+    return NextResponse.json(
+      {
+        count: 0,
+        next: null,
+        previous: null,
+        results: [],
+      },
+      { status: 200 }
+    );
+  }
 
-    return {
-      ...spot,
-      total_reviews,
-      average_rating,
-    };
-  });
+  // Process `parkingSpots` to calculate `total_reviews`
+  const enrichedData = data.map((spot) =>
+  ({
+    ...spot,
+    total_reviews: spot.reviews.length,
+  })
+  );
 
   // Convert keys to camelCase
   const results = convertObjectKeysToCamelCase(enrichedData);
 
   // Calculate pagination URLs
-  const nextOffset = offset + limit + 1 < count ? (offset + limit + 1) : null;
-  const previousOffset = offset - limit - 1 >= 0 ? (offset - limit - 1) : null;
+  const nextOffset = offset + limit < count ? (offset + limit) : null; // Adjusted to avoid off-by-one error
+  const previousOffset = offset - limit >= 0 ? (offset - limit) : null;
 
   const res = {
     count, // Total count of parking spots
@@ -93,6 +106,5 @@ export async function GET(req: Request) {
         : null,
     results,
   };
-
   return NextResponse.json(res, { status: 200 });
 }
