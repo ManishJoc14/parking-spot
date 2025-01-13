@@ -20,7 +20,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import clsx from "clsx";
-import { getDayInNumber, timeAgo } from "@/lib/utils";
+import { formatTimeTo12Hour, getDayInNumber, timeAgo } from "@/lib/utils";
 import BookingForm from "@/components/parkingComponents/booking-form";
 import ParkingSpotReviewForm from "@/components/parkingComponents/create-review-form";
 import { v4 as uuidv4 } from "uuid";
@@ -259,7 +259,7 @@ export default function ParkingBookingPage() {
                             <div className="flex items-center mt-1">
                               <Clock className="w-5 h-5 mr-2 text-gray-500" />
                               <span className="text-gray-600">
-                                {slot.startTime} - {slot.endTime}
+                                {formatTimeTo12Hour(slot.startTime)} - {formatTimeTo12Hour(slot.endTime)}
                               </span>
                             </div>
                           </div>

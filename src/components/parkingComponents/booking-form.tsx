@@ -130,6 +130,11 @@ export default function BookingForm({ id, parkingDetailed }: BookingFormProps) {
           res.data
         );
 
+        if (!tokenImage) {
+          toast.error("Failed to generate parking token");
+          return;
+        }
+
         setTokenImage(tokenImage);
         setIsBookingSuccess(true);
       }

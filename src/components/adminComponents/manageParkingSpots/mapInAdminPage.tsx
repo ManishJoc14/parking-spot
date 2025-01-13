@@ -1,16 +1,8 @@
 "use client";
 
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import { Icon } from "leaflet";
-import "leaflet/dist/leaflet.css";
-import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
-import "leaflet-routing-machine/dist/leaflet-routing-machine.js";
-
-const parkingIcon = new Icon({
-  iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-});
+import React from "react";
+import Map, { Marker, Popup } from "react-map-gl/maplibre";
+import "maplibre-gl/dist/maplibre-gl.css";
 
 interface MapProps {
   latitude: number;
@@ -28,32 +20,44 @@ export default function MapInAdminPage({
       <div className="relative w-full h-[70vh] bg-gray-300 animate-pulse"></div>
     );
   }
+
   return (
     <div className="relative w-full h-[70vh]">
-      <MapContainer
-        center={[latitude, longitude]}
-        zoom={15}
-        style={{ height: "100%", width: "100%" }}
-        className="rounded-lg shadow-md"
+      <Map
+        initialViewState={{
+          latitude: latitude,
+          longitude: longitude,
+          zoom: 15,
+        }}
+        style={{ width: "100%", height: "100%" }}
+        mapStyle={`https://api.maptiler.com/maps/streets/style.json?key=${process.env.NEXT_PUBLIC_MAPTILER_API_KEY}`}
+        onClick={(e) => {
+          const [newLongitude, newLatitude] = e.lngLat.toArray();
+          setLocation(newLatitude, newLongitude);
+        }}
       >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
+        {/* Parking Marker */}
         <Marker
-          position={[latitude, longitude]}
-          icon={parkingIcon}
+          latitude={latitude}
+          longitude={longitude}
           draggable={true}
-          eventHandlers={{
-            dragend: (e) => {
-              setLocation(e.target.getLatLng().lat, e.target.getLatLng().lng);
-            },
+          onDragEnd={(e) => {
+            const newLat = e.lngLat.lat;
+            const newLng = e.lngLat.lng;
+            setLocation(newLat, newLng);
           }}
         >
-          <Popup>Your parking spot</Popup>
+          <img
+            src="https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png"
+            alt="Parking Location"
+            className="w-6 h-10"
+          />
         </Marker>
-        {/* <LocationMarker /> */}
-      </MapContainer>
+
+        <Popup latitude={latitude} longitude={longitude} anchor="top">
+          Your parking spot
+        </Popup>
+      </Map>
     </div>
   );
 }

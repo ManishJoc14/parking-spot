@@ -11,8 +11,6 @@ export default function Testimonials() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [testimonials, setTestimonials] = useState<Feedback[] | null>(null);
 
-  console.log(testimonials);
-
   useEffect(() => {
     try {
       async function fetchTestimonials() {

@@ -101,6 +101,36 @@ export enum DayOfWeek {
   SUN = "Sunday",
 }
 
+export interface VehicleCapacity {
+  id?: number;
+  vehicleType: string;
+  capacity: number;
+}
+
+export interface Feature {
+  id?: number;
+  feature: string;
+}
+
+export interface Availability {
+  id?: number;
+  day: string;
+  startTime: string;
+  endTime: string;
+}
+
+export interface Review {
+  id?: number;
+  reviewer: {
+    uuid: string;
+    fullName: string;
+    photo: string | null;
+  };
+  rating: number;
+  comments: string;
+  createdAt: string;
+}
+
 export interface ParkingDetailed {
   id: number;
   name: string;
@@ -113,30 +143,12 @@ export interface ParkingDetailed {
   longitude: number;
   totalReviews: number;
   averageRating: number;
-  vehiclesCapacity: {
-    vehicleType: string;
-    capacity: number;
-  }[];
-  features: {
-    feature: string;
-  }[];
-
-  availabilities: {
-    day: string;
-    startTime: string;
-    endTime: string;
-  }[];
-
-  reviews: {
-    reviewer: {
-      uuid: string;
-      fullName: string;
-      photo: string | null;
-    };
-    rating: number;
-    comments: string;
-    createdAt: string;
-  }[];
+  postcode?: string;
+  distance?: number;
+  vehiclesCapacity: VehicleCapacity[];
+  features: Feature[];
+  availabilities: Availability[];
+  reviews: Review[];
 }
 
 export enum BookingStatus {

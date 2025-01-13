@@ -130,8 +130,14 @@ html {
   aspect-ratio: 10/7;
 }
 
-.leaflet-popup-content {
+.mapboxgl-popup-content {
   width: 400px !important;
+}
+
+.mapboxgl-popup-close-button {
+  right: 2px;
+  top: 2px;
+  font-size: 1.4rem;
 }
 
 @keyframes changeImages {
