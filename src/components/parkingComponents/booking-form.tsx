@@ -57,7 +57,7 @@ export default function BookingForm({ id, parkingDetailed }: BookingFormProps) {
   useEffect(() => {
     async function fetchUser() {
       const res = await axiosInstance.get("/auth");
-      setUser(res.data);
+      setUser(res.data.user);
     }
     fetchUser();
   }, []);

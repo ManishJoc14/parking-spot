@@ -9,6 +9,7 @@ import Pagination from "@/components/adminComponents/manageParkingSpots/paginati
 import { SearchIcon } from "lucide-react";
 import dynamic from "next/dynamic";
 import { Input } from "@/components/ui/input";
+import { User } from "@supabase/supabase-js";
 
 const DynamicCreateParkingSpot = dynamic(
   () =>
@@ -28,16 +29,27 @@ export default function Page() {
     null
   );
 
+  const [user, setUser] = useState<User | null>(null);
   const [total, setTotal] = React.useState(0);
   const [next, setNext] = React.useState<string | null>(null);
   const [previous, setPrevious] = React.useState<string | null>(null);
   const limit = 4;
 
+  useEffect(() => {
+    async function fetchUser() {
+      const res = await axiosInstance.get("/auth");
+      setUser(res.data.user);
+    }
+    fetchUser();
+  }, []);
+
   const fetchData = async (url: string) => {
+    if (!user) return;
+    const queryString = url.slice(url.indexOf("?") + 1);
     try {
-      const res = await axiosInstance.get(url, {
+      const res = await axiosInstance.get(`/admin/parking-spot-app/parking-spots?${queryString}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          user_uuid: user?.id || "",
         },
       });
       setParkingSpots(res.data.results);
@@ -50,8 +62,9 @@ export default function Page() {
   };
 
   useEffect(() => {
+    if (!user) return;
     fetchData(`/admin/parking-spot-app/parking-spots?limit=${limit}`);
-  }, []);
+  }, [user]);
 
   const handleSearch = async (query: string) => {
     fetchData(

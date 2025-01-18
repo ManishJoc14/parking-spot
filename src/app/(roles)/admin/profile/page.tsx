@@ -23,6 +23,7 @@ import axiosInstance from "@/lib/axiosInstance";
 import { toast } from "react-toastify";
 import { Badge } from "@/components/ui/badge";
 import { ProfileSkeleton } from "@/components/adminComponents/profile/profileSkeleton";
+import { User } from "@supabase/supabase-js";
 
 const profileSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -49,6 +50,8 @@ export default function EditProfilePage() {
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+
 
   const form = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
@@ -62,13 +65,21 @@ export default function EditProfilePage() {
   });
 
   useEffect(() => {
+    async function fetchUser() {
+      const res = await axiosInstance.get("/auth");
+      setUser(res.data.user);
+    }
+    fetchUser();
+  }, []);
+
+  useEffect(() => {
     const fetchProfile = async () => {
       try {
         const res = await axiosInstance.get<UserProfile>(
           "/public/user-app/users/profile",
           {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+              user_uuid: user?.id || "",
             },
           }
         );
@@ -144,8 +155,12 @@ export default function EditProfilePage() {
                   <AvatarImage src={previewImage} alt={profile.fullName} />
                 )}
                 <AvatarFallback>
-                  {profile.firstName[0]}
-                  {profile.lastName[0]}
+                  {
+                    profile.fullName
+                      .split(" ")
+                      .map((name) => name[0])
+                      .join("")
+                  }
                 </AvatarFallback>
               </Avatar>
               <div>

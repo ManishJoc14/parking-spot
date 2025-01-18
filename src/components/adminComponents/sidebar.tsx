@@ -3,10 +3,30 @@
 import Link from "next/link";
 import NavLinks from "@/components/adminComponents/navlinks";
 import { LogOutIcon } from "lucide-react";
-import { useAuth } from "@/context/authContext";
+import axiosInstance from "@/lib/axiosInstance";
+import { toast } from "react-toastify";
+import { redirect } from "next/navigation";
+import { useEffect, useState } from "react";
+import { User } from "@supabase/supabase-js";
 
 export default function SideNav() {
-  const { user, logout } = useAuth();
+
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const fetchuser = async () => {
+      const response = await axiosInstance.get("/auth");
+      setUser(response.data.user);
+    };
+
+    fetchuser();
+  }, []);
+
+  const logout = async () => {
+    const res = await axiosInstance.post("/auth/logout");
+    toast.success(res.data.message);
+    return redirect("/sign-in");
+  };
 
   return (
     <div className="flex h-full sticky flex-col px-3 py-4 md:px-2">
@@ -17,7 +37,7 @@ export default function SideNav() {
         <div className="w-32 text-xl sm:text-3xl pb-1 text-white font-mont-semibold md:w-40 ">
           Parkify
         </div>
-        <span className="text-md text-white/80">{user?.fullName}</span>
+        <span className="text-md text-white/80">{user?.email}</span>
       </Link>
       <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
         <NavLinks />

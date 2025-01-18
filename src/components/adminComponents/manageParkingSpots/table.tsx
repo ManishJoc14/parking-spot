@@ -32,7 +32,7 @@ export default function ParkingSpotsTable({
                 <div className="flex items-center justify-between border-b pb-4">
                   <div>
                     <div className="mb-2 flex items-center">
-                      {spot.coverImage ? (
+                      {/* {spot.coverImage ? (
                         <Image
                           src={spot.coverImage}
                           className="mr-2 rounded-full"
@@ -42,7 +42,14 @@ export default function ParkingSpotsTable({
                         />
                       ) : (
                         <div className="mr-2 h-7 w-7 rounded-full bg-gray-200"></div>
-                      )}
+                        )} */}
+                      {/* FIXME - use image of parking */}
+                      <div className="mr-2 h-7 w-7 text-xs rounded-full bg-gray-200 flex justify-center items-center">
+                        {spot.name
+                          .split(" ")
+                          .map((n) => n.charAt(0).toUpperCase())
+                          .join("")}
+                      </div>
                       <p>{spot.name}</p>
                     </div>
                     <p className="text-sm text-gray-500">
@@ -93,7 +100,7 @@ export default function ParkingSpotsTable({
                 >
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex items-center gap-3">
-                      {spot.coverImage ? (
+                      {/* {spot.coverImage ? (
                         <Image
                           src={spot.coverImage}
                           className="mr-2 h-7 w-7  rounded-full"
@@ -108,7 +115,14 @@ export default function ParkingSpotsTable({
                             .map((n) => n.charAt(0).toUpperCase())
                             .join("")}
                         </div>
-                      )}
+                      )} */}
+                      {/* FIXME - use image of parking */}
+                      <div className="mr-2 h-7 w-7 text-xs rounded-full bg-gray-200 flex justify-center items-center">
+                        {spot.name
+                          .split(" ")
+                          .map((n) => n.charAt(0).toUpperCase())
+                          .join("")}
+                      </div>
                       <p>{spot.name}</p>
                     </div>
                   </td>

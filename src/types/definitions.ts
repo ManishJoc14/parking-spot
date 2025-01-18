@@ -177,6 +177,8 @@ export interface BookingResponse {
 
 export interface Booking {
   id: number;
+  userId: string;
+  parkingSpot: number;
   status: BookingStatus;
   bookingNo: string;
   startTime: string;
@@ -188,6 +190,4 @@ export interface Booking {
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
-  parkingSpot: number;
-  user: number;
 }

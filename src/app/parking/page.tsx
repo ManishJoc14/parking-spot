@@ -56,7 +56,7 @@ export default function SearchPage() {
   const [activeIndex, setActiveIndex] = useState<number>(-1);
 
   // infinite scroll
-  const limit = 2;
+  const limit = 4;
   const offset = useRef(0);
   const next = useRef<string | null>("");
 

@@ -1,7 +1,23 @@
+"use client";
 import { Button } from "@/components/ui/button";
+import axiosInstance from "@/lib/axiosInstance";
+import { getMessage, getRoute } from "@/lib/utils";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function Hero() {
+
+  const [roles, setRoles] = useState<string[] | null>(null);
+
+  useEffect(() => {
+    const fetchuser = async () => {
+      const response = await axiosInstance.get("/auth");
+      setRoles(response.data.roles);
+    };
+
+    fetchuser();
+  }, []);
+
   return (
     <div className="container mx-auto relative overflow-hidden ">
       <div className=" px-4 md:px-6 pb-8">
@@ -23,14 +39,16 @@ export default function Hero() {
             time and avoid the hassle of finding parking in busy areas.
           </p>
           <div className="flex flex-col gap-4 pt-4 min-[400px]:flex-row justify-center">
-            <Link href={"/parking"}>
-              <Button
-                size="lg"
-                className="h-12 px-10 hover:scale-95 font-mont-medium transition-all"
-              >
-                Find Parking
-              </Button>
-            </Link>
+            {roles && roles[0] && (
+              <Link href={getRoute(roles[0])}>
+                <Button
+                  size="lg"
+                  className="h-12 px-10 hover:scale-95 font-mont-medium transition-all"
+                >
+                  {getMessage(roles[0])}
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
       </div>

@@ -135,6 +135,29 @@ export function getDayInNumber(day: DayOfWeek) {
   }
 }
 
+export default function splitName(name: string) {
+  let firstName: string = "";
+  let middleName: string = "";
+  let lastName: string = "";
+
+  // Split the name by spaces
+  const namesArr = name?.split(" ");
+
+  if (namesArr?.length === 3) {
+    firstName = namesArr[0];
+    middleName = namesArr[1];
+    lastName = namesArr[2];
+  } else if (namesArr?.length === 2) {
+    firstName = namesArr[0];
+    lastName = namesArr[1];
+  } else if (namesArr?.length === 1) {
+    throw new Error("firstname and lastname are required");
+  }
+
+  return [firstName, middleName, lastName];
+}
+
+
 export const TimeOnly = (date: string) => {
   return new Date(date).toLocaleTimeString();
 };
@@ -167,6 +190,21 @@ export const formatTimeTo12Hour = (time: string): string => {
   return format(date, "hh:mm a");
 }
 
+export const getRoute = (role: string | null) => {
+  if (role && role.toLowerCase() === "owner") {
+    return "/admin/parking-spots";
+  } else {
+    return "/parking";
+  }
+}
+
+export const getMessage = (role: string | null) => {
+  if (role && role.toLowerCase() === "owner") {
+    return "Go to Dashboard";
+  } else {
+    return "Find Parking";
+  }
+}
 /**
  * Generates a parking token image based on the API response.
  * @param response API response containing parking booking details.
@@ -180,8 +218,8 @@ export function generateParkingToken(
     // Destructure the response
     const { bookingNo, vehicleNo, vehicle, amount, startTime, endTime, status, paymentStatus } = response;
 
-    const start = startTime.split("T")[0] + " " + formatTimeTo12Hour(response.startTime.split("T")[1].slice(0,8));
-    const end = endTime.split("T")[0] + " " + formatTimeTo12Hour(response.endTime.split("T")[1].slice(0,8));
+    const start = startTime.split("T")[0] + " " + formatTimeTo12Hour(response.startTime.split("T")[1].slice(0, 8));
+    const end = endTime.split("T")[0] + " " + formatTimeTo12Hour(response.endTime.split("T")[1].slice(0, 8));
 
     // Create a canvas
     const canvas = createCanvas(600, 420);

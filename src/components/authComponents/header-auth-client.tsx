@@ -14,12 +14,11 @@ export default function HeaderAuthClient() {
   useEffect(() => {
     const fetchuser = async () => {
       const response = await axiosInstance.get("/auth");
-      setUser(response.data);
+      setUser(response.data.user);
     };
 
     fetchuser();
   }, []);
-
 
   const handleSignOut = async (e: FormEvent) => {
     e.preventDefault();
