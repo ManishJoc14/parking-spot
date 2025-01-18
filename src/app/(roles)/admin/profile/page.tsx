@@ -24,6 +24,7 @@ import { toast } from "react-toastify";
 import { Badge } from "@/components/ui/badge";
 import { ProfileSkeleton } from "@/components/adminComponents/profile/profileSkeleton";
 import { User } from "@supabase/supabase-js";
+import { SmallLoadingSpinner } from "@/components/ui/loading-spinner";
 
 const profileSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -51,6 +52,7 @@ export default function EditProfilePage() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
+  const [isUpdating, setIsUpdating] = useState(false);
 
 
   const form = useForm<ProfileFormData>({
@@ -83,6 +85,7 @@ export default function EditProfilePage() {
             },
           }
         );
+
         if (res.status === 200) {
           setProfile(res.data);
           form.reset(res.data);
@@ -100,18 +103,25 @@ export default function EditProfilePage() {
 
   const onSubmit = async (data: ProfileFormData) => {
     const formData = new FormData();
+    setIsUpdating(true);
 
-    const urlToFile = async (url: string, filename: string) => {
-      const res = await fetch(url, { mode: "no-cors" });
-      const blob = await res.blob();
-      return new File([blob], filename, { type: blob.type });
-    };
+    // const urlToFile = async (url: string, filename: string) => {
+    //   const res = await fetch(url, { mode: "no-cors" });
+    //   const blob = await res.blob();
+    //   return new File([blob], filename, { type: blob.type });
+    // };
 
     Object.entries(data).forEach(async ([key, value]) => {
-      if (key === "photo" && typeof value === "string") {
-        const file = await urlToFile(value, "profileImage.jpg");
-        formData.append(key, file);
-      } else if (key === "photo" && value instanceof File) {
+      // if (key === "photo" && typeof value === "string") {
+      //   const file = await urlToFile(value, "profileImage.jpg");
+      //   formData.append(key, file);
+      // } else if (key === "photo" && value instanceof File) {
+      //   formData.append(key, value);
+      // } else {
+      //   formData.append(key, value as string);
+      // }
+      
+      if (key === "photo" && value instanceof File) {
         formData.append(key, value);
       } else {
         formData.append(key, value as string);
@@ -119,12 +129,12 @@ export default function EditProfilePage() {
     });
 
     try {
-      const res = await axiosInstance.patch(
+      const res = await axiosInstance.post(
         "/public/user-app/users/profile/update",
         formData,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            user_uuid: user?.id || "",
           },
         }
       );
@@ -137,6 +147,8 @@ export default function EditProfilePage() {
       toast.error(
         "An error occurred while updating your profile. Please try again."
       );
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -340,8 +352,9 @@ export default function EditProfilePage() {
             </div>
 
             <div className="flex justify-end py-4">
-              <Button type="submit" className="font-mont-semibold" size="lg">
-                Update Profile
+              <Button disabled={isUpdating} type="submit" className="font-mont-semibold" size="lg">
+                {isUpdating ? "Updating..." : "Update Profile"}
+                {isUpdating && <SmallLoadingSpinner />}
               </Button>
             </div>
           </form>
