@@ -51,7 +51,8 @@ export async function GET(req: Request) {
              updated_at, parking_spot, 
              user_id
             `)
-        .eq("user_id", userUuid);
+        .eq("user_id", userUuid)
+        .order("updated_at", { ascending: false });
 
     if (search) {
         query = query.ilike("vehicle_no", search);
@@ -60,8 +61,6 @@ export async function GET(req: Request) {
     // Apply pagination
     const { data, error } = await query
         .range(offset, offset + limit - 1);
-
-    console.log(data, search);
 
     if (error) {
         return NextResponse.json({ error: error.message }, { status: 500 });

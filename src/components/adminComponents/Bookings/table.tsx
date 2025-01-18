@@ -6,9 +6,11 @@ import { v4 as uuidv4 } from "uuid";
 export default function BookingsTable({
   data,
   fetchBookings,
+  user_uuid,
 }: {
   data: Booking[];
   fetchBookings: (url: string) => void;
+  user_uuid: string;
 }) {
   const headers = [
     { key: "bookingNo", label: "Booking No" },
@@ -42,6 +44,7 @@ export default function BookingsTable({
                   <StatusUpdateButton
                     fetchBookings={fetchBookings}
                     booking={booking}
+                    user_uuid={user_uuid}
                   />
                 </div>
                 <div className="pt-4 text-sm">
@@ -99,12 +102,13 @@ export default function BookingsTable({
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
                     {booking.vehicleNo} (
-                    {VehicleType[booking.vehicle as keyof typeof VehicleType]})
+                    {VehicleType[booking.vehicle as unknown as keyof typeof VehicleType]})
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
                     <StatusUpdateButton
                       fetchBookings={fetchBookings}
                       booking={booking}
+                      user_uuid={user_uuid}
                     />
                   </td>
                 </tr>

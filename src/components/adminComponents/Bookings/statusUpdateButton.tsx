@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Booking, BookingStatus } from "@/types/definitions";
 import {
   Select,
@@ -12,13 +12,16 @@ import {
 import axiosInstance from "@/lib/axiosInstance";
 import { getBookingKey } from "@/lib/utils";
 import { v4 as uuidv4 } from "uuid";
+import { SmallLoadingSpinner } from "@/components/ui/loading-spinner";
 
 export default function StatusUpdateButton({
   booking,
   fetchBookings,
+  user_uuid,
 }: {
   booking: Booking;
   fetchBookings: (url: string) => void;
+  user_uuid: string;
 }) {
   const [status, setStatus] = useState(booking.status);
   const [isLoading, setIsLoading] = useState(false);
@@ -28,10 +31,10 @@ export default function StatusUpdateButton({
     try {
       await axiosInstance.put(
         `/admin/parking-spot-app/bookings/${booking.id}/update-status`,
-        { status: newStatus },
+        { status: newStatus, parking_spot: booking.parkingSpot },
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            user_uuid
           },
         }
       );

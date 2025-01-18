@@ -120,7 +120,7 @@ export default function EditProfilePage() {
       // } else {
       //   formData.append(key, value as string);
       // }
-      
+
       if (key === "photo" && value instanceof File) {
         formData.append(key, value);
       } else {

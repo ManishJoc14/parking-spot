@@ -4,13 +4,14 @@ import { convertObjectKeysToCamelCase } from "@/lib/utils";
 
 export async function GET(
     request: Request,
-    { params }: { params: { uuid: string } }
+    { params }: { params: Promise<{ uuid: string }> }
 ) {
     try {
         const supabase = await createClient();
 
-        // Extract UUID from params
-        const { uuid } = params;
+        // Wait for params to resolve
+        const resolvedParams = await params;
+        const { uuid } = resolvedParams;
 
         if (!uuid) {
             return NextResponse.json({ error: "UUID is required" }, { status: 400 });
