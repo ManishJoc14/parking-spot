@@ -26,13 +26,18 @@ import { Trash2 } from "lucide-react";
 import MapInAdminPage from "./mapInAdminPage";
 import { useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
+import { SmallLoadingSpinner } from "@/components/ui/loading-spinner";
+import { User } from "@supabase/supabase-js";
 
 export default function CreateParkingSpotForm() {
   const [userPosition, setUserPosition] = useState<[number, number] | null>(
     null
   );
   const [previewImage, setPreviewImage] = useState<null | string>(null);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
+  
 
   const {
     register,
@@ -43,15 +48,15 @@ export default function CreateParkingSpotForm() {
   } = useForm<ParkingSpotFormData>({
     resolver: zodResolver(parkingSpotSchema),
     defaultValues: {
-      name: "",
-      address: "",
-      postcode: "",
-      description: "",
-      ratePerHour: "0",
-      ratePerDay: "0",
+      name: "test",
+      address: "test",
+      postcode: "test",
+      description: "test",
+      ratePerHour: "20",
+      ratePerDay: "300",
       features: [],
       availabilities: [{ day: "MON", startTime: "", endTime: "" }],
-      vehiclesCapacity: [{ vehicleType: "SMALL", capacity: 1 }],
+      vehiclesCapacity: [{ vehicleType: "SMALL", capacity: 5 }, { vehicleType: "BIKE", capacity: 10 }],
     },
   });
 
@@ -76,6 +81,14 @@ export default function CreateParkingSpotForm() {
       );
     }
   }, [setValue]);
+
+  useEffect(() => {
+    async function fetchUser() {
+      const res = await axiosInstance.get("/auth");
+      setUser(res.data.user);
+    }
+    fetchUser();
+  }, []);
 
   const {
     fields: availabilityFields,
@@ -107,6 +120,7 @@ export default function CreateParkingSpotForm() {
   const onSubmit = async (data: ParkingSpotFormData) => {
 
     const formData = new FormData();
+    setIsUpdating(true);
 
     Object.entries(data).forEach(([key, value]) => {
       if (key === "coverImage" && value instanceof File) {
@@ -131,7 +145,7 @@ export default function CreateParkingSpotForm() {
         formData,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            user_uuid: user?.id || "",
           },
         }
       );
@@ -144,6 +158,9 @@ export default function CreateParkingSpotForm() {
     } catch (error) {
       console.log("Error in creating parking spot", error);
       toast.error("Failed to create parking spot");
+    }
+    finally {
+      setIsUpdating(false);
     }
   };
 
@@ -537,11 +554,13 @@ export default function CreateParkingSpotForm() {
 
       <div className="flex justify-end">
         <Button
+          disabled={isUpdating}
           className="font-mont-semibold text-white"
           type="submit"
           size="lg"
         >
-          Submit
+          {isUpdating ? "Submitting..." : "Submit"}
+          {isUpdating && <SmallLoadingSpinner />}
         </Button>
       </div>
     </form>

@@ -4,6 +4,7 @@ import { createCanvas } from "canvas";
 import { customAlphabet } from "nanoid";
 import { redirect } from "next/navigation";
 import { parseISO, isBefore, isAfter, format, isEqual } from "date-fns";
+import qs from "qs";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -134,6 +135,18 @@ export function getDayInNumber(day: DayOfWeek) {
       return 6;
   }
 }
+
+export async function parseNestedFormData(formData: FormData): Promise<any> {
+  const rawData: Record<string, string> = {};
+
+  for (const [key, value] of formData.entries()) {
+    rawData[key] = value as string;
+  }
+
+  // Use qs to parse raw data into a nested object
+  return qs.parse(rawData);
+}
+
 
 export default function splitName(name: string) {
   let firstName: string = "";

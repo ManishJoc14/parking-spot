@@ -15,13 +15,12 @@ const ParkingCard = ({
 }) => {
   return (
     <div className="relative flex flex-col sm:flex-row w-full overflow-hidden bg-white rounded-lg hover:shadow-sm transition-all">
-      <div className="w-full sm:w-1/3">
-        {/* {parking.coverImage ? (
+      <div className="w-full relative sm:w-1/3">
+      {parking.coverImage && parking.coverImage.startsWith(process.env.NEXT_PUBLIC_SUPABASE_URL!) ? (
           <Image
             src={parking.coverImage}
             alt={parking.name}
-            height={100}
-            width={100}
+            fill
             className="h-full min-w-[100px] w-full object-cover"
           />
         ) : (
@@ -31,14 +30,7 @@ const ParkingCard = ({
               .map((n) => n.charAt(0).toUpperCase())
               .join("")}
           </div>
-        )} */}
-
-        <div className="h-full min-w-[100px] w-full flex justify-center items-center bg-gray-200">
-          {parking?.name
-            .split(" ")
-            .map((n) => n.charAt(0).toUpperCase())
-            .join("")}
-        </div>
+        )}
       </div>
       <div className="flex-1 p-4">
         {/* header */}

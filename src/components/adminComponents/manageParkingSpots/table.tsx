@@ -31,26 +31,25 @@ export default function ParkingSpotsTable({
               >
                 <div className="flex items-center justify-between border-b pb-4">
                   <div>
-                    <div className="mb-2 flex items-center">
-                      {/* {spot.coverImage ? (
-                        <Image
-                          src={spot.coverImage}
-                          className="mr-2 rounded-full"
-                          width={28}
-                          height={28}
-                          alt={`Parking spot ${spot.name}`}
-                        />
+                    <div className="mb-2 w-full flex items-center gap-3">
+                      {spot.coverImage && spot.coverImage.startsWith(process.env.NEXT_PUBLIC_SUPABASE_URL!) ? (
+                        <div className="relative h-7 w-7">
+                          <Image
+                            src={spot.coverImage}
+                            className="rounded-full"
+                            fill
+                            alt={`Parking spot ${spot.name}`}
+                          />
+                        </div>
                       ) : (
-                        <div className="mr-2 h-7 w-7 rounded-full bg-gray-200"></div>
-                        )} */}
-                      {/* FIXME - use image of parking */}
-                      <div className="mr-2 h-7 w-7 text-xs rounded-full bg-gray-200 flex justify-center items-center">
-                        {spot.name
-                          .split(" ")
-                          .map((n) => n.charAt(0).toUpperCase())
-                          .join("")}
-                      </div>
-                      <p>{spot.name}</p>
+                        <div className="h-7 w-7 aspect-square text-xs rounded-full bg-gray-200 flex justify-center items-center">
+                          {spot.name
+                            .split(" ")
+                            .map((n) => n.charAt(0).toUpperCase())
+                            .join("")}
+                        </div>
+                      )}
+                      <p className="ml-2">{spot.name}</p>
                     </div>
                     <p className="text-sm text-gray-500">
                       Rate (Per Hour):{" "}
@@ -99,31 +98,26 @@ export default function ParkingSpotsTable({
                   className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                 >
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                    <div className="flex items-center gap-3">
-                      {/* {spot.coverImage ? (
-                        <Image
-                          src={spot.coverImage}
-                          className="mr-2 h-7 w-7  rounded-full"
-                          width={28}
-                          height={28}
-                          alt={`Parking spot${spot.name}`}
-                        />
+                    <div className="flex w-full items-center gap-3">
+                      {spot.coverImage && spot.coverImage.startsWith(process.env.NEXT_PUBLIC_SUPABASE_URL!) ? (
+                        <div className="relative h-7 w-7">
+                          <Image
+                            src={spot.coverImage}
+                            className="rounded-full"
+                            fill
+                            alt={`Parking spot ${spot.name}`}
+                          />
+                        </div>
                       ) : (
-                        <div className="mr-2 h-7 w-7 text-xs rounded-full bg-gray-200 flex justify-center items-center">
+
+                        <div className="h-7 w-7 aspect-square text-xs rounded-full bg-gray-200 flex justify-center items-center">
                           {spot.name
                             .split(" ")
                             .map((n) => n.charAt(0).toUpperCase())
                             .join("")}
                         </div>
-                      )} */}
-                      {/* FIXME - use image of parking */}
-                      <div className="mr-2 h-7 w-7 text-xs rounded-full bg-gray-200 flex justify-center items-center">
-                        {spot.name
-                          .split(" ")
-                          .map((n) => n.charAt(0).toUpperCase())
-                          .join("")}
-                      </div>
-                      <p>{spot.name}</p>
+                      )}
+                      <p className="ml-2">{spot.name}</p>
                     </div>
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
@@ -147,6 +141,6 @@ export default function ParkingSpotsTable({
           </table>
         </div>
       </div>
-    </div>
+    </div >
   );
 }

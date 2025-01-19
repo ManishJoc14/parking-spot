@@ -14,6 +14,7 @@ export async function GET(req: Request) {
   const vehicleType = searchParams.getAll("vehicle_type");
   const features = searchParams.getAll("features");
   const ordering = searchParams.get("ordering") || "rate_per_hour";
+  const search = searchParams.get("search");
 
   // Determine if ordering is descending
   const isDescending = ordering.startsWith("-");
@@ -62,6 +63,11 @@ export async function GET(req: Request) {
       )
       .in("vehicle_types.vehicle_type", vehicleType.length ? vehicleType : [])
       .in("features.feature", features.length ? features : []);
+
+    if
+      (search) {
+      query = query.or(`name.ilike.%${search}%,address.ilike.%${search}%,postcode.ilike.%${search}%`);
+    }
   }
 
   // Apply ordering and pagination
@@ -79,8 +85,26 @@ export async function GET(req: Request) {
     total_reviews: spot.reviews?.length || 0,
   }));
 
+  let updatedDatawithImages = await Promise.all(enrichedData.map(async (item: any) => {
+    let cover_image = item.cover_image;
+    // Generate public URL for the stored file path
+
+    const { data: imageData, error: urlError } = await supabase
+      .storage
+      .from('parking_photos')
+      .createSignedUrl(cover_image, 60 * 60
+      );
+    // URL valid for 1 hour
+
+    if (urlError) {
+      return { ...item, cover_image: null };
+    } else {
+      return { ...item, cover_image: imageData.signedUrl };
+    }
+  }));
+
   // Convert keys to camelCase
-  const results = convertObjectKeysToCamelCase(enrichedData);
+  const results = convertObjectKeysToCamelCase(updatedDatawithImages);
 
   // Utility function to build query strings for pagination
   const buildQueryString = (params: Record<string, any>): string => {

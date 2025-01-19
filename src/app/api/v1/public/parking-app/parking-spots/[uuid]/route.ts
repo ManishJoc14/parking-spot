@@ -76,6 +76,20 @@ export async function GET(
             average_rating,
         };
 
+        // Generate public URL for the stored file path
+        const { data: imageData, error: urlError } = await supabase
+            .storage
+            .from('parking_photos')
+            .createSignedUrl(enrichedData.cover_image, 60 * 60
+            );
+        // URL valid for 1 hour
+
+        if (urlError) {
+            enrichedData.cover_image = null;
+        } else {
+            enrichedData.cover_image = imageData.signedUrl;
+        }
+
         // Convert keys to camelCase
         const result = convertObjectKeysToCamelCase(enrichedData);
 
