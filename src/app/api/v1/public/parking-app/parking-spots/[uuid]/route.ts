@@ -29,6 +29,7 @@ export async function GET(
         rate_per_day,
         latitude,
         longitude,
+        postcode,
         vehicles_capacity:parking_spot_vehicle_capacity(
           id,
           vehicle_type,

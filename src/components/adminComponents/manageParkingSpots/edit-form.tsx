@@ -30,9 +30,9 @@ import { User } from "@supabase/supabase-js";
 import { SmallLoadingSpinner } from "@/components/ui/loading-spinner";
 
 export default function EditParkingSpotForm({
-  parkingSpotId,
+  parkingSpotUUID,
 }: {
-  parkingSpotId: string;
+  parkingSpotUUID: string;
 }) {
   const [loading, setLoading] = useState(true);
 
@@ -50,8 +50,8 @@ export default function EditParkingSpotForm({
       address: "",
       postcode: "",
       description: "",
-      ratePerHour: "0",
-      ratePerDay: "0",
+      ratePerHour: 0,
+      ratePerDay: 0,
       features: [],
       availabilities: [{ day: "MON", startTime: "", endTime: "" }],
       vehiclesCapacity: [{ vehicleType: "SMALL", capacity: 1 }],
@@ -115,7 +115,7 @@ export default function EditParkingSpotForm({
     const fetchParkingSpot = async () => {
       try {
         const res = await axiosInstance.get(
-          `/public/parking-app/parking-spots/${parkingSpotId}`,
+          `/public/parking-app/parking-spots/${parkingSpotUUID}`,
         );
         if (res.status === 200) {
           const data = res.data;
@@ -130,9 +130,7 @@ export default function EditParkingSpotForm({
     };
 
     fetchParkingSpot();
-  }, [parkingSpotId, setValue, reset]);
-
-  console.log(errors);
+  }, [parkingSpotUUID, setValue, reset]);
 
   const onSubmit = async (data: ParkingSpotFormData) => {
     const formData = new FormData();
@@ -166,7 +164,7 @@ export default function EditParkingSpotForm({
 
     try {
       const res = await axiosInstance.patch(
-        `/admin/parking-spot-app/parking-spots/${parkingSpotId}`,
+        `/admin/parking-spot-app/parking-spots/${parkingSpotUUID}`,
         formData,
         {
           headers: {

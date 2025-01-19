@@ -11,6 +11,7 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const offset = parseInt(searchParams.get("offset") || "0");
     const limit = parseInt(searchParams.get("limit") || "5");
+    const search = searchParams.get("search");
 
     // Extract user information from request headers or body
     const userUuid = req.headers.get('user_uuid');
@@ -42,13 +43,19 @@ export async function GET(req: Request) {
         );
     }
 
-    // Apply pagination
-    const { data, error } = await supabase
+    let query = supabase
         .from("parking_spots")
         .select(
             `id:uuid, name, cover_image, address, rate_per_hour, rate_per_day, postcode`
         )
-        .eq("owner", userUuid)
+        .eq("owner", userUuid);
+
+    if (search) {
+        query = query.or(`name.ilike.%${search}%,address.ilike.%${search}%,postcode.ilike.%${search}%`);
+    }
+
+    // Apply pagination
+    const { data, error } = await query
         .order("updated_at", { ascending: false })  // lastest 
         .range(offset, offset + limit - 1);
 
@@ -191,12 +198,6 @@ export async function POST(req: Request) {
 
     const { features, availabilities, vehicles_capacity, ...parkingSpotTableData } = data;
 
-    console.log({
-        parking_spot_data: { ...parkingSpotTableData, owner: userUuid },
-        features: features,
-        availabilities: availabilities,
-        vehicles_capacity: vehicles_capacity,
-    })
     try {
         // Call the transaction function
         const { data: parkingSpotId, error: insertParkingSpotError } = await supabase.rpc(

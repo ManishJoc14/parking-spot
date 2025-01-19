@@ -28,7 +28,7 @@ export default function EdiParkingPage() {
       <Breadcrumbs breadcrumbs={breadcrumbs} />
 
       <div className="mt-10">
-        <DynamicEditParkingSpotForm parkingSpotId={uuid as string} />
+        <DynamicEditParkingSpotForm parkingSpotUUID={uuid as string} />
       </div>
     </main>
   );

@@ -85,7 +85,7 @@ export default function Page() {
             </label>
             <Input
               className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
-              placeholder="Search parking spots.."
+              placeholder="Search by name, address and postcode.."
               onChange={(e) => {
                 handleSearch(e.target.value);
               }}

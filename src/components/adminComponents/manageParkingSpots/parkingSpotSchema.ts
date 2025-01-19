@@ -25,12 +25,8 @@ export const parkingSpotSchema = z.object({
   description: z.string().min(1, "Description is required"),
   latitude: z.number(),
   longitude: z.number(),
-  ratePerHour: z
-    .string()
-    .regex(/^-?\d{0,8}(?:\.\d{0,2})?$/, "Invalid rate per hour format"),
-  ratePerDay: z
-    .string()
-    .regex(/^-?\d{0,8}(?:\.\d{0,2})?$/, "Invalid rate per day format"),
+  ratePerHour: z.union([z.number(), z.string()]),
+  ratePerDay: z.union([z.number(), z.string()]),
   availabilities: z
     .array(
       z.object({
