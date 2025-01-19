@@ -5,6 +5,7 @@ import {
 } from "@/components/adminComponents/manageParkingSpots/buttons";
 import { formatCurrency } from "@/lib/utils";
 import { AdminParkingSpot } from "@/types/definitions";
+import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 export default function ParkingSpotsTable({
@@ -32,15 +33,13 @@ export default function ParkingSpotsTable({
                 <div className="flex items-center justify-between border-b pb-4">
                   <div>
                     <div className="mb-2 w-full flex items-center gap-3">
-                      {spot.coverImage && spot.coverImage.startsWith(process.env.NEXT_PUBLIC_SUPABASE_URL!) ? (
-                        <div className="relative h-7 w-7">
-                          <Image
-                            src={spot.coverImage}
-                            className="rounded-full"
-                            fill
-                            alt={`Parking spot ${spot.name}`}
-                          />
-                        </div>
+                      {spot.coverImage &&
+                        spot.coverImage.startsWith(process.env.NEXT_PUBLIC_SUPABASE_URL!) ? (
+                        <ImageWithLoading
+                          src={spot.coverImage}
+                          alt={`Parking spot ${spot.name}`}
+                          className="rounded-full"
+                        />
                       ) : (
                         <div className="h-7 w-7 aspect-square text-xs rounded-full bg-gray-200 flex justify-center items-center">
                           {spot.name
@@ -99,17 +98,14 @@ export default function ParkingSpotsTable({
                 >
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex w-full items-center gap-3">
-                      {spot.coverImage && spot.coverImage.startsWith(process.env.NEXT_PUBLIC_SUPABASE_URL!) ? (
-                        <div className="relative h-7 w-7">
-                          <Image
-                            src={spot.coverImage}
-                            className="rounded-full"
-                            fill
-                            alt={`Parking spot ${spot.name}`}
-                          />
-                        </div>
+                      {spot.coverImage &&
+                        spot.coverImage.startsWith(process.env.NEXT_PUBLIC_SUPABASE_URL!) ? (
+                        <ImageWithLoading
+                          src={spot.coverImage}
+                          alt={`Parking spot ${spot.name}`}
+                          className="rounded-full"
+                        />
                       ) : (
-
                         <div className="h-7 w-7 aspect-square text-xs rounded-full bg-gray-200 flex justify-center items-center">
                           {spot.name
                             .split(" ")
@@ -141,6 +137,32 @@ export default function ParkingSpotsTable({
           </table>
         </div>
       </div>
-    </div >
+    </div>
+  );
+}
+
+function ImageWithLoading({
+  src,
+  alt,
+  className,
+}: {
+  src: string;
+  alt: string;
+  className?: string;
+}) {
+  const [isLoading, setIsLoading] = useState(true);
+
+  return (
+    <div className="relative h-7 w-7">
+      {isLoading && <div className="absolute inset-0 animate-pulse bg-gray-200"></div>}
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        className={`${className} ${isLoading ? "hidden" : ""}`}
+        loading="eager"
+        onLoadingComplete={() => setIsLoading(false)}
+      />
+    </div>
   );
 }
