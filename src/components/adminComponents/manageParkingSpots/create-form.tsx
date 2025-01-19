@@ -37,7 +37,7 @@ export default function CreateParkingSpotForm() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
-  
+
 
   const {
     register,
@@ -54,7 +54,7 @@ export default function CreateParkingSpotForm() {
       description: "test",
       ratePerHour: "20",
       ratePerDay: "300",
-      features: [],
+      features: [{ feature: "CCTV" }],
       availabilities: [{ day: "MON", startTime: "", endTime: "" }],
       vehiclesCapacity: [{ vehicleType: "SMALL", capacity: 5 }, { vehicleType: "BIKE", capacity: 10 }],
     },

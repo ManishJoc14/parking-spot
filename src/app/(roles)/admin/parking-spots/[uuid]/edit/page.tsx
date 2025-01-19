@@ -17,10 +17,10 @@ const DynamicEditParkingSpotForm = dynamic(
 );
 
 export default function EdiParkingPage() {
-  const id = useParams().id;
+  const uuid = useParams().uuid;
   const breadcrumbs = [
     { label: "Parking Spots", href: "/admin/parking-spots" },
-    { label: "Edit", href: `/admin/parking-spots/${id}/edit`, active: true },
+    { label: "Edit", href: `/admin/parking-spots/${uuid}/edit`, active: true },
   ];
 
   return (
@@ -28,7 +28,7 @@ export default function EdiParkingPage() {
       <Breadcrumbs breadcrumbs={breadcrumbs} />
 
       <div className="mt-10">
-        <DynamicEditParkingSpotForm parkingSpotId={id as string} />
+        <DynamicEditParkingSpotForm parkingSpotId={uuid as string} />
       </div>
     </main>
   );

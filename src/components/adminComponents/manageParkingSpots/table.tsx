@@ -64,8 +64,8 @@ export default function ParkingSpotsTable({
                     </p>
                   </div>
                   <div className="flex justify-end gap-2">
-                    <UpdateParkingSpot id={spot.id} />
-                    <DeleteParkingSpot id={spot.id} />
+                    <UpdateParkingSpot uuid={spot.id} />
+                    <DeleteParkingSpot uuid={spot.id} />
                   </div>
                 </div>
               </div>
@@ -127,8 +127,8 @@ export default function ParkingSpotsTable({
                   </td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">
-                      <UpdateParkingSpot id={spot.id} />
-                      <DeleteParkingSpot id={spot.id} />
+                      <UpdateParkingSpot uuid={spot.id} />
+                      <DeleteParkingSpot uuid={spot.id} />
                     </div>
                   </td>
                 </tr>

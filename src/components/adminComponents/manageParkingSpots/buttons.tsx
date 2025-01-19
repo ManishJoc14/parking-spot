@@ -13,10 +13,10 @@ export function CreateParkingSpot() {
   );
 }
 
-export function UpdateParkingSpot({ id }: { id: string }) {
+export function UpdateParkingSpot({ uuid }: { uuid: string }) {
   return (
     <Link
-      href={`/admin/parking-spots/${id}/edit`}
+      href={`/admin/parking-spots/${uuid}/edit`}
       className="rounded-md border p-2 hover:bg-gray-100"
     >
       <Pen className="w-4" />
@@ -24,12 +24,12 @@ export function UpdateParkingSpot({ id }: { id: string }) {
   );
 }
 
-export function DeleteParkingSpot({ id }: { id: string }) {
+export function DeleteParkingSpot({ uuid }: { uuid: string }) {
   return (
     <>
       <form>
         <button className="rounded-md border p-2 hover:bg-gray-100">
-          <p className="hidden">{id}</p>
+          <p className="hidden">{uuid}</p>
           <span className="sr-only">Delete</span>
           <Trash2 className="w-4" />
         </button>

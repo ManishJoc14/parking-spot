@@ -12,7 +12,8 @@ export const parkingSpotSchema = z.object({
       z.string().url("Invalid URL for cover image"),
       z.null(),
     ])
-    .optional(),
+  // .optional()
+  ,
   address: z
     .string()
     .min(1, "Address is required")

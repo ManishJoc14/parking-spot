@@ -26,6 +26,8 @@ import { Trash2 } from "lucide-react";
 import MapInAdminPage from "./mapInAdminPage";
 import CreateFormSkeleton from "../skeletons";
 import { v4 as uuidv4 } from "uuid";
+import { User } from "@supabase/supabase-js";
+import { SmallLoadingSpinner } from "@/components/ui/loading-spinner";
 
 export default function EditParkingSpotForm({
   parkingSpotId,
@@ -57,11 +59,15 @@ export default function EditParkingSpotForm({
   });
   const router = useRouter();
   const [previewImage, setPreviewImage] = useState<null | string>(null);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
 
   const setLocation = (latitude: number, longitude: number) => {
     setValue("latitude", latitude);
     setValue("longitude", longitude);
   };
+
+
 
   const latitude = useWatch({ control, name: "latitude" });
   const longitude = useWatch({ control, name: "longitude" });
@@ -96,17 +102,20 @@ export default function EditParkingSpotForm({
     name: "vehiclesCapacity",
   });
 
+  useEffect(() => {
+    async function fetchUser() {
+      const res = await axiosInstance.get("/auth");
+      setUser(res.data.user);
+    }
+    fetchUser();
+  }, []);
+
   // Fetch parking spot data
   useEffect(() => {
     const fetchParkingSpot = async () => {
       try {
         const res = await axiosInstance.get(
-          `/admin/parking-spot-app/parking-spots/${parkingSpotId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-            },
-          }
+          `/public/parking-app/parking-spots/${parkingSpotId}`,
         );
         if (res.status === 200) {
           const data = res.data;
@@ -127,6 +136,7 @@ export default function EditParkingSpotForm({
 
   const onSubmit = async (data: ParkingSpotFormData) => {
     const formData = new FormData();
+    setIsUpdating(true);
 
     const urlToFile = async (url: string, filename: string) => {
       const res = await fetch(url, { mode: "no-cors" });
@@ -160,7 +170,7 @@ export default function EditParkingSpotForm({
         formData,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            user_uuid: user?.id || "",
           },
         }
       );
@@ -172,6 +182,8 @@ export default function EditParkingSpotForm({
     } catch (error) {
       console.log("Error updating parking spot:", error);
       toast.error("Failed to update parking spot.");
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -179,7 +191,7 @@ export default function EditParkingSpotForm({
     try {
       await axiosInstance.delete(url, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          user_uuid: user?.id || "",
         },
       });
     } catch (error) {
@@ -607,8 +619,14 @@ export default function EditParkingSpotForm({
       </Card>
 
       <div className="flex justify-end">
-        <Button className="font-mont-medium text-white" type="submit" size="lg">
-          Update
+        <Button
+          disabled={isUpdating}
+          className="font-mont-semibold text-white"
+          type="submit"
+          size="lg"
+        >
+          {isUpdating ? "Submitting..." : "Submit"}
+          {isUpdating && <SmallLoadingSpinner />}
         </Button>
       </div>
     </form>
