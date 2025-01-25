@@ -1,7 +1,7 @@
 "use client";
 
 import axiosInstance from "@/lib/axiosInstance";
-import { ChevronRight, Facebook, Instagram, X, Youtube } from "lucide-react";
+import { ChevronRight, Facebook, Instagram, Loader, X, Youtube } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from "uuid";
 
 export default function Footer() {
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
   const socialLinks = [
     { href: "/", icon: Facebook },
     { href: "/", icon: X },
@@ -37,11 +38,11 @@ export default function Footer() {
       link: { href: "mailto:info@parkify.co.uk", label: "info@parkify.co.uk" },
     },
   ];
-
   const handleNewsletterSubmit = async (
     e: React.FormEvent<HTMLFormElement>
   ) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const res = await axiosInstance.post(
@@ -54,6 +55,9 @@ export default function Footer() {
       setEmail("");
     } catch {
       toast.error("Failed to subscribe to the newsletter. Please try again.");
+    }
+    finally {
+      setLoading(false);
     }
 
     setEmail("");
@@ -143,7 +147,10 @@ export default function Footer() {
               type="submit"
               className="px-4 py-2 bg-primary text-white rounded-r-md hover:bg-primary/70"
             >
-              <ChevronRight />
+
+              {
+                loading ? <Loader /> : <ChevronRight />
+              }
             </button>
           </form>
         </div>

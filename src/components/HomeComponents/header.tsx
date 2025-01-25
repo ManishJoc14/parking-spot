@@ -20,7 +20,7 @@ export default function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-gray-900 text-white">
+    <header className="sticky top-0 z-[8] w-full border-b bg-gray-900 text-white">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center">
           <span className="h-8 text-4xl">{/* FIXME - LOGO */}</span>

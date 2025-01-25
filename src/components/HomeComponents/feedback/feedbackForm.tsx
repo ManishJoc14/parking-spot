@@ -201,9 +201,12 @@ export default function FeedbackForm() {
               <Button
                 type="submit"
                 size="lg"
+                disabled={loading}
                 className="h-12 w-full font-mont-semibold px-8 hover:scale-[0.99] transition-all"
               >
-                Submit
+                {
+                  loading ? "Submitting..." : "Submit Feedback"
+                }
               </Button>
             </form>
           )}

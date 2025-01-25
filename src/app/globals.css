@@ -140,6 +140,10 @@ html {
   font-size: 1.4rem;
 }
 
+.Toastify {
+  z-index: 999;
+}
+
 @keyframes changeImages {
   0% {
     background-image: url("/images/step1.webp");
