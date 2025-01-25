@@ -1,24 +1,25 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { User } from "@supabase/supabase-js";
 import axiosInstance from "@/lib/axiosInstance";
 import { redirect } from "next/navigation";
 import { toast } from "react-toastify";
+import { useAuth } from "@/context/authContext";
 
 export default function HeaderAuthClient() {
-  const [user, setUser] = useState<User | null>(null);
 
-  useEffect(() => {
-    const fetchuser = async () => {
-      const response = await axiosInstance.get("/auth");
-      setUser(response.data.user);
-    };
+  const { user, loading } = useAuth();
 
-    fetchuser();
-  }, []);
+  if (loading) {
+    return <>
+      <div className="animate-pulse flex items-center text-sm gap-4 mr-12">
+        <div className="w-40 rounded-md bg-gray-400 h-8"></div>
+        <div className="w-20 rounded-md bg-gray-400 h-8"></div>
+      </div>
+    </>;
+  }
 
   const handleSignOut = async (e: FormEvent) => {
     e.preventDefault();
@@ -39,8 +40,8 @@ export default function HeaderAuthClient() {
   };
 
   return user ? (
-    <div className="flex items-center text-sm gap-4">
-      <Link href={getRoute("Owner")}>Hey,{user.email}!</Link>
+    <div className="flex items-center text-sm gap-4 mr-12">
+      <Link href={getRoute("Owner")}>Hey, {user?.user_metadata?.full_name}!</Link>
       <Button onClick={handleSignOut} variant={"outline"}>
         Sign out
       </Button>

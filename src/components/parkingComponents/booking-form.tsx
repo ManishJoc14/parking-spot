@@ -15,7 +15,6 @@ import { ParkingDetailed, User, VehicleType } from "@/types/definitions";
 import {
   calculateAmount,
   generateParkingToken,
-  getVehicleTypeKey,
   isValidTime,
 } from "@/lib/utils";
 import axiosInstance from "@/lib/axiosInstance";
@@ -23,6 +22,7 @@ import { toast } from "react-toastify";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
+import { SmallLoadingSpinner } from "../ui/loading-spinner";
 
 export interface BookingFormProps {
   id: number;
@@ -38,6 +38,7 @@ export default function BookingForm({ id, parkingDetailed }: BookingFormProps) {
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
   const { uuid } = useParams();
+  const [isBooking, setIsBooking] = useState(false);
 
   const startTimeRef = useRef<HTMLInputElement | null>(null);
   const endTimeRef = useRef<HTMLInputElement | null>(null);
@@ -249,9 +250,10 @@ export default function BookingForm({ id, parkingDetailed }: BookingFormProps) {
               </div>
               <Button
                 type="submit"
+                disabled={isBooking}
                 className="w-full font-mont-medium text-lg py-6"
               >
-                Book Now
+                {isBooking ? ("Booking..." + <SmallLoadingSpinner />) : "Book Now"}
               </Button>
             </>
           )}

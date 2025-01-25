@@ -5,34 +5,23 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import axiosInstance from "@/lib/axiosInstance"
-import type { User } from "@supabase/supabase-js"
-import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { redirect, useRouter } from "next/navigation"
+import { useState } from "react"
 import { Loader2 } from "lucide-react"
 import type React from "react"
+import { useAuth } from "@/context/authContext"
 
 const ChooseRolePage = () => {
     const [role, setRole] = useState<string>("")
-    const [user, setUser] = useState<User | null>(null)
     const [isLoading, setIsLoading] = useState(false)
-    const router = useRouter(); 
+    const router = useRouter()
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const response = await axiosInstance.get("/auth")
-                setUser(response.data.user)
+    const { user } = useAuth();
 
-                if (response.data.roles) {
-                    router.push("/")
-                }
-            } catch (error) {
-                console.error("Failed to fetch user:", error)
-            }
-        }
-
-        fetchUser()
-    }, [])
+    // skip this page if user already has a role
+    if (user?.roles) {
+        return redirect("/")
+    }
 
     const handleSaveRole = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -49,7 +38,7 @@ const ChooseRolePage = () => {
             )
 
             if (res.status === 201) {
-                router.push("/")
+                return router.push("/");
             }
         } catch (error) {
             console.error("Failed to save role:", error)

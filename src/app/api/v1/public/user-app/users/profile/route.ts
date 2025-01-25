@@ -45,30 +45,34 @@ export async function GET() {
         return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // Generate a signed URL for the stored file path
-    const { data: imageData, error: urlError } = await supabase
-        .storage
-        .from('user_photos')
-        .createSignedUrl(data.photo, 60 * 60
-        );
-    // URL valid for 1 hour
+    let imageData
+    if (data.photo) {
+        // Generate a signed URL for the stored file path
+        const { data: imageResponse, error: urlError } = await supabase
+            .storage
+            .from('user_photos')
+            .createSignedUrl(data.photo, 60 * 60
+            );
+        // URL valid for 1 hour
+        imageData = imageResponse;
 
-    if (urlError) {
-        return NextResponse.json({ error1: urlError.message }, { status: 500 });
+        if (urlError) {
+            return NextResponse.json({ error1: urlError.message }, { status: 500 });
+        }
     }
 
     // construct user profile
-    const [firstName, middleName, lastName] = splitName(data?.full_name);
+    const [firstName, middleName, lastName] = splitName(data?.full_name || user?.user_metadata?.full_name);
     let userProfile: UserProfile = {
         id: data?.id,
         email: data?.email,
         firstName,
         middleName,
         lastName,
-        fullName: data?.full_name,
+        fullName: data?.full_name || user?.user_metadata?.full_name || "",
         bio: data?.bio,
         phoneNo: data?.phone_no || "",
-        photo: imageData.signedUrl,  // Use the signed URL
+        photo: imageData?.signedUrl || user?.user_metadata?.avatar_url || "",
         roles: data?.roles,
         dateJoined: user?.created_at,
         isEmailVerified: user?.email_confirmed_at ? true : false,

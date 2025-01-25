@@ -6,21 +6,12 @@ import { LogOutIcon } from "lucide-react";
 import axiosInstance from "@/lib/axiosInstance";
 import { toast } from "react-toastify";
 import { redirect } from "next/navigation";
-import { useEffect, useState } from "react";
-import { User } from "@supabase/supabase-js";
+import { useAuth } from "@/context/authContext";
+import Image from "next/image";
 
 export default function SideNav() {
 
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    const fetchuser = async () => {
-      const response = await axiosInstance.get("/auth");
-      setUser(response.data.user);
-    };
-
-    fetchuser();
-  }, []);
+  const { user, loading } = useAuth();
 
   const logout = async () => {
     const res = await axiosInstance.post("/auth/logout");
@@ -34,10 +25,32 @@ export default function SideNav() {
         className="mb-2 flex flex-col justify-start rounded-md bg-primary pt-6 px-4 pb-4"
         href="/"
       >
-        <div className="w-32 text-xl sm:text-3xl pb-1 text-white font-mont-semibold md:w-40 ">
+        <div className="w-32 text-xl sm:text-3xl pb-2 text-white font-mont-semibold md:w-40 ">
           Parkify
         </div>
-        <span className="text-md text-white/80">{user?.email}</span>
+        {
+          loading ? (
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse"></div>
+              <div className="w-24 h-6 rounded-md bg-gray-200 animate-pulse"></div>
+            </div>
+          ) : (
+            <div>
+              <div className="flex items-center gap-2">
+                <Image
+                  width={32}
+                  height={32}
+                  src={user?.user_metadata?.avatar_url || "/avatar.png"}
+                  alt="avatar"
+                  className="w-8 h-8 rounded-full"
+                />
+                <div className="text-white font-mont-medium">
+                  {user?.user_metadata?.full_name}
+                </div>
+              </div>
+            </div>
+          )
+        }
       </Link>
       <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
         <NavLinks />

@@ -28,6 +28,7 @@ import CreateFormSkeleton from "../skeletons";
 import { v4 as uuidv4 } from "uuid";
 import { User } from "@supabase/supabase-js";
 import { SmallLoadingSpinner } from "@/components/ui/loading-spinner";
+import { useAuth } from "@/context/authContext";
 
 export default function EditParkingSpotForm({
   parkingSpotUUID,
@@ -57,17 +58,15 @@ export default function EditParkingSpotForm({
       vehiclesCapacity: [{ vehicleType: "SMALL", capacity: 1 }],
     },
   });
+  const { user, loading: authLoading } = useAuth();
   const router = useRouter();
   const [previewImage, setPreviewImage] = useState<null | string>(null);
   const [isUpdating, setIsUpdating] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
 
   const setLocation = (latitude: number, longitude: number) => {
     setValue("latitude", latitude);
     setValue("longitude", longitude);
   };
-
-
 
   const latitude = useWatch({ control, name: "latitude" });
   const longitude = useWatch({ control, name: "longitude" });
@@ -101,14 +100,6 @@ export default function EditParkingSpotForm({
     control,
     name: "vehiclesCapacity",
   });
-
-  useEffect(() => {
-    async function fetchUser() {
-      const res = await axiosInstance.get("/auth");
-      setUser(res.data.user);
-    }
-    fetchUser();
-  }, []);
 
   // Fetch parking spot data
   useEffect(() => {
@@ -209,7 +200,7 @@ export default function EditParkingSpotForm({
     Delete(`/admin/parking-spot-app/vehicle-capacity/${id}/delete/`);
   };
 
-  if (loading) {
+  if (loading || authLoading) {
     return <CreateFormSkeleton />;
   }
 
@@ -623,7 +614,7 @@ export default function EditParkingSpotForm({
           type="submit"
           size="lg"
         >
-          {isUpdating ? "Submitting..." : "Submit"}
+          {isUpdating ? "Saving..." : "Save Changes"}
           {isUpdating && <SmallLoadingSpinner />}
         </Button>
       </div>

@@ -1,6 +1,6 @@
 import { BookingsTableSkeleton, PaginationSkeleton } from "@/components/adminComponents/skeletons";
 
-export default function loading() {
+export default function BookingsPageLoading() {
   return (
     <div className="w-full animate-pulse">
       <div className="h-8 w-44 rounded-md bg-gray-100"></div>

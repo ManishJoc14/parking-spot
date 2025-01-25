@@ -23,8 +23,9 @@ import axiosInstance from "@/lib/axiosInstance";
 import { toast } from "react-toastify";
 import { Badge } from "@/components/ui/badge";
 import { ProfileSkeleton } from "@/components/adminComponents/profile/profileSkeleton";
-import { User } from "@supabase/supabase-js";
 import { SmallLoadingSpinner } from "@/components/ui/loading-spinner";
+import { useAuth } from "@/context/authContext";
+import Image from "next/image";
 
 const profileSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -51,9 +52,8 @@ export default function EditProfilePage() {
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const [user, setUser] = useState<User | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
-
+  const { user, loading: authLoading } = useAuth();
 
   const form = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
@@ -67,14 +67,7 @@ export default function EditProfilePage() {
   });
 
   useEffect(() => {
-    async function fetchUser() {
-      const res = await axiosInstance.get("/auth");
-      setUser(res.data.user);
-    }
-    fetchUser();
-  }, []);
-
-  useEffect(() => {
+    if (!user) return;
     const fetchProfile = async () => {
       try {
         const res = await axiosInstance.get<UserProfile>(
@@ -99,7 +92,7 @@ export default function EditProfilePage() {
     };
 
     fetchProfile();
-  }, [form]);
+  }, [form, user]);
 
   const onSubmit = async (data: ProfileFormData) => {
     const formData = new FormData();
@@ -123,6 +116,8 @@ export default function EditProfilePage() {
 
       if (key === "photo" && value instanceof File) {
         formData.append(key, value);
+      } else if (key === "photo" && typeof value === "string") {
+        // do nothing
       } else {
         formData.append(key, value as string);
       }
@@ -152,9 +147,10 @@ export default function EditProfilePage() {
     }
   };
 
-  if (loading || !profile) {
+  if (loading || !profile || authLoading) {
     return <ProfileSkeleton />;
   }
+
 
   return (
     <Card className="w-full">
@@ -162,19 +158,24 @@ export default function EditProfilePage() {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <div className="flex flex-col items-center lg:flex-row lg:justify-start space-x-6">
-              <Avatar className="w-24 h-24">
-                {previewImage && (
-                  <AvatarImage src={previewImage} alt={profile.fullName} />
-                )}
-                <AvatarFallback>
-                  {
+              {
+                previewImage || profile.photo ? (
+                  <Image
+                    src={previewImage || profile.photo}
+                    alt="Profile Image"
+                    width={100}
+                    height={100}
+                    className="rounded-full"
+                  />
+                ) : (
+                  <div className="flex items-center justify-center w-16 h-16 bg-gray-200 rounded-full text-gray-500 font-mont-semibold text-lg">{
                     profile.fullName
                       .split(" ")
                       .map((name) => name[0])
                       .join("")
-                  }
-                </AvatarFallback>
-              </Avatar>
+                  }</div>
+                )
+              }
               <div>
                 <h2 className="text-2xl font-mont-semibold">
                   {profile.fullName}

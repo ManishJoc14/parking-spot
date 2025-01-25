@@ -21,7 +21,7 @@ export async function POST(req: Request) {
     };
 
     // add photo to body if provided
-    let photo = formData.get('photo') as File;
+    let photo = formData.get('photo') as File || null;
     if (photo) {
         body = { ...body, photo };
     }
@@ -36,8 +36,12 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: 'User UUID not provided' }, { status: 400 });
     }
 
+    // Prepare data for updating the user profile
+    let data = convertObjectKeysToSnakeCase({ ...body });
+
     // Handle photo upload if provided
     if (photo) {
+        console.log({ photo })
         const { error: uploadError } = await supabase
             .storage
             .from('user_photos')
@@ -46,10 +50,10 @@ export async function POST(req: Request) {
         if (uploadError) {
             return NextResponse.json({ error1: uploadError.message }, { status: 500 });
         }
-    }
 
-    // Prepare data for updating the user profile
-    const data = convertObjectKeysToSnakeCase({ ...body, photo: `${userUuid}/photo.jpg` });
+        // update photo path in user profile
+        data = convertObjectKeysToSnakeCase({ ...body, photo: `${userUuid}/photo.jpg` });
+    }
 
     // Update user profile
     const { error: updateError } = await supabase

@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default function Loading() {
+export default function ParkingSpotEditPageLoading() {
   return (
     <main className="overflow-y-auto">
       <div className="flex items-center space-x-2 mb-6">

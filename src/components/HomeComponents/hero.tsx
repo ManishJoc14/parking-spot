@@ -1,30 +1,20 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import axiosInstance from "@/lib/axiosInstance";
+import { useAuth } from "@/context/authContext";
 import { getMessage, getRoute } from "@/lib/utils";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { useEffect, useState } from "react";
 
 export default function Hero() {
 
-  const [roles, setRoles] = useState<string[] | null>(null);
+  const { user, loading } = useAuth();
 
-  useEffect(() => {
-    const fetchuser = async () => {
-      const response = await axiosInstance.get("/auth");
-      const fetchedRoles = response.data.roles;
+  // if user is logged in but has no role, redirect to choose role page
+  if (!loading && user && !user?.roles) {
+    return redirect("/choose-role");
+  }
 
-      if (!fetchedRoles || fetchedRoles.length === 0) {
-        redirect("/choose-role");
-      } else {
-        setRoles(fetchedRoles);
-      }
-    };
-
-    fetchuser();
-  }, []);
-
+  const roles = user?.roles;
 
   return (
     <div className="container mx-auto relative overflow-hidden ">
@@ -46,18 +36,24 @@ export default function Hero() {
             Book parking spots for cars, bikes, and scooters with ease. Save
             time and avoid the hassle of finding parking in busy areas.
           </p>
-          <div className="flex flex-col gap-4 pt-4 min-[400px]:flex-row justify-center">
-            {roles && roles[0] && (
-              <Link href={getRoute(roles[0])}>
-                <Button
-                  size="lg"
-                  className="h-12 px-10 hover:scale-95 font-mont-medium transition-all"
-                >
-                  {getMessage(roles[0])}
-                </Button>
-              </Link>
-            )}
-          </div>
+          {
+            loading ? (
+              <div className="h-12 w-36 rounded-md bg-gray-400 animate-pulse "></div>
+            ) : (
+              <div className="flex flex-col gap-4 pt-4 min-[400px]:flex-row justify-center">
+                {roles && roles[0] && (
+                  <Link href={getRoute(roles[0])}>
+                    <Button
+                      size="lg"
+                      className="h-12 px-10 hover:scale-95 font-mont-medium transition-all"
+                    >
+                      {getMessage(roles[0])}
+                    </Button>
+                  </Link>
+                )}
+              </div>
+            )
+          }
         </div>
       </div>
     </div>

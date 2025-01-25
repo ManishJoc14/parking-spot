@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
 import localFont from "next/font/local";
 import { Metadata } from "next";
+import { AuthProvider } from "@/context/authContext";
 
 const MontserratPrimary = localFont({
   src: "./fonts/Montserrat-Regular.ttf",
@@ -51,11 +52,13 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="flex fixed right-4 top-4 z-10">
-            <ThemeSwitcher />
-            <ToastContainer />
-          </div>
-          {children}
+          <AuthProvider>
+            <div className="flex fixed right-4 top-4 z-10">
+              <ThemeSwitcher />
+              <ToastContainer />
+            </div>
+            {children}
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>
