@@ -10,20 +10,32 @@ import { v4 as uuidv4 } from "uuid";
 export default function Testimonials() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [testimonials, setTestimonials] = useState<Feedback[] | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    try {
-      async function fetchTestimonials() {
+    async function fetchTestimonials() {
+      try {
         const res = await axiosInstance.get("/public/website-app/feedbacks");
         setTestimonials(res.data);
+      } catch {
+        console.log("Error fetching testimonials");
+      } finally {
+        setLoading(false);
       }
-      fetchTestimonials();
-    } catch {
-      console.log("Error fetching testimonials");
     }
+    fetchTestimonials();
   }, []);
 
-  if (!testimonials) return <p>Loading...</p>;
+  if (loading) {
+    return (
+      <TestimonialsLoadingSkeleton />
+    );
+  }
+
+  if (!testimonials)
+    return (
+      <EmptyTestimonials />
+    );
 
   const nextTestimonial = () => {
     setCurrentIndex((prev) => (prev + 1) % testimonials.length);
@@ -43,23 +55,6 @@ export default function Testimonials() {
     return totalRating / testimonials.length;
   };
 
-  if (testimonials.length === 0)
-    return (
-      <section
-        id="testimonials"
-        className="container mx-auto py-32 px-8 md:px-16 bg-accent"
-      >
-        <div className="text-center">
-          <h2 className="text-2xl font-mont-bold text-gray-800">
-            No Testimonials Available
-          </h2>
-          <p className="text-muted-foreground mt-4 text-md">
-            We currently do not have any testimonials to display. Please check
-            back later.
-          </p>
-        </div>
-      </section>
-    );
 
   return (
     <section
@@ -89,31 +84,15 @@ export default function Testimonials() {
           </p>
 
           <div className="mt-8 flex flex-col items-start space-y-2">
-            {/* <div className="flex -space-x-4">
-              {testimonials.map((testimonial, index) => (
-                <div
-                  key={uuidv4()}
-                  className="relative h-16 w-16 overflow-hidden border-2 rounded-full"
-                >
-                  <Image
-                    src={testimonial?.image}
-                    alt={testimonial.fullName}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              ))}
-            </div> */}
             <div className="flex items-center space-x-1">
               <span className="font-semibold"></span>
               {[1, 2, 3, 4, 5].map((star) => (
                 <Star
                   key={uuidv4()}
-                  className={`h-6 w-6 ${
-                    star <= Math.floor(calculateAverageRating())
-                      ? "fill-yellow-400 text-yellow-400"
-                      : "fill-gray-200 text-gray-200"
-                  }`}
+                  className={`h-6 w-6 ${star <= Math.floor(calculateAverageRating())
+                    ? "fill-yellow-400 text-yellow-400"
+                    : "fill-gray-200 text-gray-200"
+                    }`}
                 />
               ))}
               <span className="text-muted-foreground">
@@ -130,12 +109,9 @@ export default function Testimonials() {
               <CardContent className="p-6 z-[4] relative rounded-lg bg-white">
                 <div className="space-y-4">
                   <div className="flex flex-col gap-2 sm:flex-row items-center space-y-2">
-                    {/* IMAGE */}
                     <div className="relative h-16 w-16 p-2 border-primary/60 border rounded-full flex-shrink-0">
                       <User className="h-12 w-12 text-primary" />
                     </div>
-
-                    {/* NAME and ROLE and STARS */}
                     <div className="ml-2">
                       <div>
                         <h3 className="font-mont-bold">
@@ -149,11 +125,10 @@ export default function Testimonials() {
                         {[1, 2, 3, 4, 5].map((star) => (
                           <Star
                             key={uuidv4()}
-                            className={`h-6 w-6 ${
-                              star <= testimonials[currentIndex].rating
-                                ? "fill-yellow-400 text-yellow-400"
-                                : "fill-gray-200 text-gray-200"
-                            }`}
+                            className={`h-6 w-6 ${star <= testimonials[currentIndex].rating
+                              ? "fill-yellow-400 text-yellow-400"
+                              : "fill-gray-200 text-gray-200"
+                              }`}
                           />
                         ))}
                       </div>
@@ -185,4 +160,53 @@ export default function Testimonials() {
       </div>
     </section>
   );
+}
+
+function EmptyTestimonials() {
+  return (
+    <section
+      id="testimonials"
+      className="container mx-auto py-32 px-8 md:px-16 bg-accent"
+    >
+      <div className="text-center">
+        <h2 className="text-2xl font-mont-bold text-gray-800">
+          No Testimonials Available
+        </h2>
+        <p className="text-muted-foreground mt-4 text-md">
+          We currently do not have any testimonials to display. Please check
+          back later.
+        </p>
+      </div>
+    </section>
+  )
+}
+
+
+function TestimonialsLoadingSkeleton() {
+  return (
+    <section
+      id="testimonials"
+      className="container mx-auto py-16 px-8 md:px-16 bg-accent"
+    >
+      <div className="container flex flex-col sm:flex-row gap-16">
+        {/* Skeleton for the Left Side */}
+        <div className="flex-1 space-y-4">
+          <div className="h-4 w-32 bg-gray-300 rounded-md"></div>
+          <div className="h-8 w-80 bg-gray-300 rounded-md"></div>
+          <div className="h-4 w-96 bg-gray-300 rounded-md"></div>
+          <div className="h-4 w-48 bg-gray-300 rounded-md"></div>
+          <div className="h-16 w-96 bg-gray-300 rounded-md mt-4"></div>
+        </div>
+
+        {/* Skeleton for the Right Side */}
+        <div className="flex-1 flex flex-col items-center gap-4">
+          <div className="h-64 w-full max-w-sm bg-gray-300 rounded-lg"></div>
+          <div className="flex gap-4">
+            <div className="h-12 w-12 bg-gray-300 rounded-full"></div>
+            <div className="h-12 w-12 bg-gray-300 rounded-full"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
 }
