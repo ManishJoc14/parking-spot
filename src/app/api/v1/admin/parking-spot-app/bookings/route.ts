@@ -55,7 +55,7 @@ export async function GET(req: Request) {
         .order("updated_at", { ascending: false });
 
     if (search) {
-        query = query.or(`vehicle_no.ilike.%${search}%,booking_no.ilike.%${search}%,postcode.ilike.%${search}%`);
+        query = query.or(`vehicle_no.ilike.%${search}%,booking_no.ilike.%${search}%%`);
     }
 
     // Apply pagination
