@@ -23,9 +23,9 @@ interface FiltersDialogProps {
 
 export function FiltersDialog({ setActiveFilters }: FiltersDialogProps) {
   const [open, setOpen] = useState(false);
-  const [selectedVehicles, setSelectedVehicles] = useState<VehicleType[]>(["BIKE" as VehicleType]);
+  const [selectedVehicles, setSelectedVehicles] = useState<VehicleType[]>([]);
   const [selectedFeatures, setSelectedFeatures] = useState<ParkingFeature[]>(
-    ["CCTV" as ParkingFeature]
+    []
   );
 
   useEffect(() => {

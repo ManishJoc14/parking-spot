@@ -28,6 +28,7 @@ import ParkingCardSkeleton from "@/components/skeletons/parking-card-skeleton";
 import InfiniteScroll from "react-infinite-scroll-component";
 import clsx from "clsx";
 import { v4 as uuidv4 } from "uuid";
+import { set } from "date-fns";
 
 // Dynamically import the Map component
 const Map = dynamic(() => import("@/components/parkingComponents/map"), {
@@ -39,8 +40,9 @@ const Map = dynamic(() => import("@/components/parkingComponents/map"), {
 
 export default function SearchPage() {
   const [search, setSearch] = useState<string>("");
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+  // const [suggestions, setSuggestions] = useState<string[]>([]);
   const [parkings, setParkings] = useState<ParkingLocation[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const [userPosition, setUserPosition] = useState<
     [number, number] | undefined
   >(undefined);
@@ -53,7 +55,7 @@ export default function SearchPage() {
     features: [],
   });
   const [ordering, setOrdering] = useState<OrderingOptions>("rate_per_hour");
-  const [activeIndex, setActiveIndex] = useState<number>(-1);
+  // const [activeIndex, setActiveIndex] = useState<number>(-1);
 
   // infinite scroll
   const limit = 4;
@@ -62,6 +64,7 @@ export default function SearchPage() {
 
   const fetchMoreData = async () => {
     try {
+      setLoading(true);
       const queryString = next.current?.slice(next.current?.indexOf("?") + 1);
       const res = await axiosInstance.get(
         `/public/parking-app/parking-spots?${queryString}`
@@ -71,37 +74,39 @@ export default function SearchPage() {
     } catch (error) {
       console.log("Failed to fetch parking spots:", error);
       setParkings([]);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (suggestions.length > 0) {
-      if (e.key === "ArrowDown") {
-        e.preventDefault(); // Prevent scrolling the page
-        setActiveIndex((prevIndex) =>
-          prevIndex < suggestions.length - 1 ? prevIndex + 1 : 0
-        );
-      } else if (e.key === "ArrowUp") {
-        e.preventDefault();
-        setActiveIndex((prevIndex) =>
-          prevIndex > 0 ? prevIndex - 1 : suggestions.length - 1
-        );
-      } else if (e.key === "Enter") {
-        if (activeIndex >= 0 && activeIndex < suggestions.length) {
-          setSearch(suggestions[activeIndex]);
-          setSuggestions([]);
-        }
-      } else if (e.key === "Escape") {
-        setSuggestions([]); // Close suggestions
-      }
-    }
-  };
+  // const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  //   if (suggestions.length > 0) {
+  //     if (e.key === "ArrowDown") {
+  //       e.preventDefault(); // Prevent scrolling the page
+  //       setActiveIndex((prevIndex) =>
+  //         prevIndex < suggestions.length - 1 ? prevIndex + 1 : 0
+  //       );
+  //     } else if (e.key === "ArrowUp") {
+  //       e.preventDefault();
+  //       setActiveIndex((prevIndex) =>
+  //         prevIndex > 0 ? prevIndex - 1 : suggestions.length - 1
+  //       );
+  //     } else if (e.key === "Enter") {
+  //       if (activeIndex >= 0 && activeIndex < suggestions.length) {
+  //         setSearch(suggestions[activeIndex]);
+  //         setSuggestions([]);
+  //       }
+  //     } else if (e.key === "Escape") {
+  //       setSuggestions([]); // Close suggestions
+  //     }
+  //   }
+  // };
 
-  const handleSuggestionClick = (suggestion: string) => {
-    setSearch(suggestion);
-    setSuggestions([]);
-    inputRef.current?.focus();
-  };
+  // const handleSuggestionClick = (suggestion: string) => {
+  //   setSearch(suggestion);
+  //   setSuggestions([]);
+  //   inputRef.current?.focus();
+  // };
 
   // const GetQueryParams = useCallback(() => {
   //   return new URLSearchParams({
@@ -175,24 +180,25 @@ export default function SearchPage() {
   useEffect(() => {
     if (!userPosition) return;
     // Fetch suggestions for the search query
-    const fetchSuggestions = async () => {
-      if (search.trim().length > 0) {
-        try {
-          const res = await axiosInstance.get(
-            `/public/parking-app/search-suggestions?search=${search}`
-          );
-          setSuggestions(res.data.suggestions || []);
-        } catch (error) {
-          console.log("Failed to fetch search suggestions:", error);
-        }
-      } else {
-        setSuggestions([]);
-      }
-    };
+    // const fetchSuggestions = async () => {
+    //   if (search.trim().length > 0) {
+    //     try {
+    //       const res = await axiosInstance.get(
+    //         `/public/parking-app/search-suggestions?search=${search}`
+    //       );
+    //       setSuggestions(res.data.suggestions || []);
+    //     } catch (error) {
+    //       console.log("Failed to fetch search suggestions:", error);
+    //     }
+    //   } else {
+    //     setSuggestions([]);
+    //   }
+    // };
 
     // Fetch parkings based on user position and search query and filters
     const fetchParkings = async () => {
       try {
+        setLoading(true);
         const queryParams = GetQueryParams();
         const res = await axiosInstance.get(
           `/public/parking-app/parking-spots?${queryParams.toString()}&limit=${limit}&offset=${offset.current
@@ -204,9 +210,12 @@ export default function SearchPage() {
         console.log("Failed to fetch parking spots:", error);
         setParkings([]);
       }
+      finally {
+        setLoading(false);
+      }
     };
 
-    fetchSuggestions();
+    // fetchSuggestions();
     fetchParkings();
   }, [userPosition, search, activeFilters, ordering, offset, GetQueryParams]);
 
@@ -236,13 +245,13 @@ export default function SearchPage() {
                 <Input
                   ref={inputRef}
                   className="pl-10 h-12"
-                  placeholder="Enter location or postcode"
+                  placeholder="Search by name, address or postcode"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  onBlur={() => setTimeout(() => setSuggestions([]), 100)}
+                // onKeyDown={handleKeyDown}
+                // onBlur={() => setTimeout(() => setSuggestions([]), 100)}
                 />
-                <div
+                {/* <div
                   className={clsx(
                     "absolute z-10 w-full border bg-white space-y-2 shadow-sm rounded-md py-4 px-4",
                     {
@@ -269,7 +278,7 @@ export default function SearchPage() {
                       <hr />
                     </Fragment>
                   ))}
-                </div>
+                </div> */}
               </div>
             </div>
 
@@ -332,9 +341,9 @@ export default function SearchPage() {
 
             <InfiniteScroll
               scrollableTarget="scrollComponent"
-              dataLength={parkings.length}
+              dataLength={parkings?.length}
               next={fetchMoreData}
-              hasMore={next.current !== null}
+              hasMore={loading && next.current !== null}
               loader={
                 <div className="space-y-4 py-4">
                   <ParkingCardSkeleton />

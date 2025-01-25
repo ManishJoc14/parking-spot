@@ -41,43 +41,22 @@ export async function GET(req: Request) {
     );
   }
 
-  // Build query for fetching parking spots
-  let query;
-  if (ordering.includes("distance")) {
-    query = supabase.rpc("get_parking_spots_with_distance", {
-      latitude_param: latitude,
-      longitude_param: longitude,
-      limit_param: limit,
-      offset_param: offset,
-    });
-  } else {
-    query = supabase
-      .from("parking_spots")
-      .select(
-        `
-        id, uuid, name, cover_image, description, address, rate_per_hour, rate_per_day, latitude, longitude, postcode, average_rating,
-        reviews:parking_spot_reviews ( id, rating ),
-        vehicle_types:parking_spot_vehicle_capacity ( id, vehicle_type ),
-        features:parking_spot_features ( id, feature )
-        `
-      )
-      .in("vehicle_types.vehicle_type", vehicleType.length ? vehicleType : [])
-      .in("features.feature", features.length ? features : []);
-
-    if
-      (search) {
-      query = query.or(`name.ilike.%${search}%,address.ilike.%${search}%,postcode.ilike.%${search}%`);
-    }
-  }
-
-  // Apply ordering and pagination
-  const { data, error } = await query
-    .order(isDescending ? ordering.slice(1) : ordering, { ascending: !isDescending })
-    .range(offset, offset + limit - 1);
+  const { data, error } = await supabase.rpc("get_parking_spots", {
+    latitude_param: latitude,
+    longitude_param: longitude,
+    vehicle_types: vehicleType.length ? vehicleType : null,
+    features: features.length ? features : null,
+    limit_param: limit,
+    offset_param: offset,
+    search: search || null,
+    order_by: isDescending ? ordering.slice(1) : ordering,
+    is_descending: isDescending,
+  })
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
+
 
   // Enrich results with additional data
   const enrichedData = data.map((spot: any) => ({
