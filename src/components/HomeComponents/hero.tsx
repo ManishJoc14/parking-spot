@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import axiosInstance from "@/lib/axiosInstance";
 import { getMessage, getRoute } from "@/lib/utils";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Hero() {
@@ -12,11 +13,18 @@ export default function Hero() {
   useEffect(() => {
     const fetchuser = async () => {
       const response = await axiosInstance.get("/auth");
-      setRoles(response.data.roles);
+      const fetchedRoles = response.data.roles;
+
+      if (!fetchedRoles || fetchedRoles.length === 0) {
+        redirect("/choose-role");
+      } else {
+        setRoles(fetchedRoles);
+      }
     };
 
     fetchuser();
   }, []);
+
 
   return (
     <div className="container mx-auto relative overflow-hidden ">
