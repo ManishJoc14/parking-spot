@@ -52,13 +52,13 @@ export default function SideNav() {
           )
         }
       </Link>
-      <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
+      <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2 text-gray-700 dark:text-gray-300">
         <NavLinks />
-        <div className="hidden h-auto w-full grow rounded-md bg-gray-50 md:block"></div>
+        <div className="hidden h-auto w-full grow rounded-md bg-gray-50 dark:bg-gray-800 md:block"></div>
         <form>
           <div
             onClick={logout}
-            className="flex h-[48px] cursor-pointer w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-mont-medium hover:bg-primary/10 hover:text-primary md:flex-none md:justify-start md:p-2 md:px-3"
+            className="flex h-[48px] cursor-pointer w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 dark:bg-gray-800 p-3 text-sm font-mont-medium hover:bg-primary/10 hover:text-primary md:flex-none md:justify-start md:p-2 md:px-3"
           >
             <button type="submit" className="flex justify-center gap-2">
               <LogOutIcon />

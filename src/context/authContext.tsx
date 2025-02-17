@@ -10,7 +10,7 @@ import {
 import axiosInstance from "@/lib/axiosInstance";
 import { User } from "@supabase/supabase-js";
 
-type USER = User & {
+export type USER = User & {
   roles: string[];
   user_metadata: {
     full_name: string;
@@ -22,6 +22,7 @@ interface AuthContextType {
   user: USER | null;
   loading: boolean;
   fetchUser: () => Promise<void>;
+  setUser: React.Dispatch<React.SetStateAction<USER | null>>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -59,6 +60,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     <AuthContext.Provider
       value={{
         user,
+        setUser,
         loading,
         fetchUser,
       }}

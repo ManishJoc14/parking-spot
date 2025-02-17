@@ -14,7 +14,7 @@ const ParkingCard = ({
   parking: ParkingDetailed | ParkingLocation;
 }) => {
   return (
-    <div className="relative flex flex-col sm:flex-row w-full overflow-hidden bg-white rounded-lg hover:shadow-sm transition-all">
+    <div className="relative flex flex-col sm:flex-row w-full overflow-hidden bg-white dark:bg-gray-800 rounded-lg hover:shadow-sm transition-all">
       <div className="w-full relative sm:w-1/3">
       {parking.coverImage && parking.coverImage.startsWith(process.env.NEXT_PUBLIC_SUPABASE_URL!) ? (
           <Image
@@ -24,7 +24,7 @@ const ParkingCard = ({
             className="h-full min-w-[100px] w-full object-cover"
           />
         ) : (
-          <div className="h-full min-w-[100px] w-full flex justify-center items-center bg-gray-200">
+          <div className="h-full min-w-[100px] w-full flex justify-center items-center bg-gray-200 dark:bg-gray-600">
             {parking?.name
               .split(" ")
               .map((n) => n.charAt(0).toUpperCase())

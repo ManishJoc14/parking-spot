@@ -71,7 +71,7 @@ export default function FeedbackForm() {
   return (
     <div id="feedback" className="container mx-auto py-20 px-4">
       <div className="flex justify-center flex-col gap-4">
-        <h2 className="text-2xl sm:text-3xl flex justify-center font-mont-bold text-gray-800 mb-8 text-center">
+        <h2 className="text-2xl sm:text-3xl flex justify-center font-mont-bold text-gray-800 dark:text-gray-300 mb-8 text-center">
           Leave Your Feedback <Feather className="text-green-600 ml-2" />
         </h2>
         {error && (

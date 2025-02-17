@@ -49,7 +49,7 @@ export default function FAQ() {
           FAQ
         </span>
       </div>
-      <h2 className="text-2xl text-center sm:text-3xl font-mont-bold text-gray-800">
+      <h2 className="text-2xl text-center sm:text-3xl font-mont-bold text-gray-800 dark:text-gray-300">
         Questions? <span className="text-primary">Look here.</span>
       </h2>
 

@@ -70,7 +70,7 @@ export default function Testimonials() {
               Testimonials?
             </span>
           </div>
-          <h2 className="text-2xl text-start sm:text-3xl font-mont-bold text-gray-800">
+          <h2 className="text-2xl text-start sm:text-3xl font-mont-bold text-gray-800 dark:text-gray-300">
             Over <span className="text-primary">1000+ Customers</span>
             <span className="block">
               {" "}
@@ -114,7 +114,7 @@ export default function Testimonials() {
                     </div>
                     <div className="ml-2">
                       <div>
-                        <h3 className="font-mont-bold">
+                        <h3 className="font-mont-bold text-gray-600">
                           {testimonials[currentIndex].fullName || "Anonymous"}
                         </h3>
                         <p className="text-sm font-mont-regular text-muted-foreground">
@@ -169,7 +169,7 @@ function EmptyTestimonials() {
       className="container mx-auto py-32 px-8 md:px-16 bg-accent"
     >
       <div className="text-center">
-        <h2 className="text-2xl font-mont-bold text-gray-800">
+        <h2 className="text-2xl font-mont-bold text-gray-800 dark:text-gray-300">
           No Testimonials Available
         </h2>
         <p className="text-muted-foreground mt-4 text-md">

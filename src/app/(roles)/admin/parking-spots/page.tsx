@@ -20,7 +20,7 @@ const DynamicCreateParkingSpot = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="w-full h-full bg-gray-100 animate-pulse rounded-lg" />
+      <div className="w-full h-full bg-gray-100 dark:bg-gray-800 animate-pulse rounded-lg" />
     ),
   }
 );

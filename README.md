@@ -1,96 +1,143 @@
-<a href="https://demo-nextjs-with-supabase.vercel.app/">
-  <img alt="Next.js and Supabase Starter Kit - the fastest way to build apps with Next.js and Supabase" src="https://demo-nextjs-with-supabase.vercel.app/opengraph-image.png">
-  <h1 align="center">Next.js and Supabase Starter Kit</h1>
-</a>
+# Parkify
 
-<p align="center">
- The fastest way to build apps with Next.js and Supabase
-</p>
+🚗 **Find, Filter, and Book Parking Effortlessly!**
 
-<p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#demo"><strong>Demo</strong></a> ·
-  <a href="#deploy-to-vercel"><strong>Deploy to Vercel</strong></a> ·
-  <a href="#clone-and-run-locally"><strong>Clone and run locally</strong></a> ·
-  <a href="#feedback-and-issues"><strong>Feedback and issues</strong></a>
-  <a href="#more-supabase-examples"><strong>More Examples</strong></a>
-</p>
-<br/>
+Parkify is a powerful and user-friendly parking management platform where users can **find, filter, and book** parking spots for their vehicles. It features advanced filtering, distance-based sorting, and seamless booking options. Admins can **manage bookings, add/update parking spots, and monitor user activity** efficiently.
 
-## Features
+---
 
-- Works across the entire [Next.js](https://nextjs.org) stack
-  - App Router
-  - Pages Router
-  - Middleware
-  - Client
-  - Server
-  - It just works!
-- supabase-ssr. A package to configure Supabase Auth to use cookies
-- Styling with [Tailwind CSS](https://tailwindcss.com)
-- Components with [shadcn/ui](https://ui.shadcn.com/)
-- Optional deployment with [Supabase Vercel Integration and Vercel deploy](#deploy-your-own)
-  - Environment variables automatically assigned to Vercel project
+## 🌟 Features
 
-## Demo
+### 🚀 User Features
 
-You can view a fully working demo at [demo-nextjs-with-supabase.vercel.app](https://demo-nextjs-with-supabase.vercel.app/).
+- 🔍 **Find & Book Parking**: Search for parking spots based on availability, location, and preferences.
+- 📍 **Advanced Filtering & Sorting**: Filter by price, availability, vehicle type, and sort by distance.
+- 🕒 **Time-Based Booking**: Reserve a parking spot within a specific time frame.
+- 🗺 **Interactive Map (React Leaflet)**: View available parking spots on a dynamic, embedded map.
+- 🌙 **Dark Mode Support**: Enjoy a seamless experience with built-in dark mode.
+- 🔐 **Authentication**:
+  - Google OAuth
+  - Email/Password Signup & Login
+- ⭐ **Feedback System**:
+  - Users can give feedback on parking spots.
+  - Users can also provide website feedback.
+- 📩 **Newsletter Subscription**: Stay updated with new features and promotions.
 
-## Deploy to Vercel
+### 🛠 Admin Features
 
-Vercel deployment will guide you through creating a Supabase account and project.
+- 📊 **Dashboard**: View and manage bookings.
+- ✅ **Manage Booking Status**: Approve, reject, or cancel user bookings.
+- 🏗 **Parking Spot Management**:
+  - Add new parking locations.
+  - Update existing parking details.
+  - Delete parking spots when necessary.
+- ✏️ **Profile Management**: Update personal admin details.
 
-After installation of the Supabase integration, all relevant environment variables will be assigned to the project so the deployment is fully functioning.
+---
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&project-name=nextjs-with-supabase&repository-name=nextjs-with-supabase&demo-title=nextjs-with-supabase&demo-description=This+starter+configures+Supabase+Auth+to+use+cookies%2C+making+the+user%27s+session+available+throughout+the+entire+Next.js+app+-+Client+Components%2C+Server+Components%2C+Route+Handlers%2C+Server+Actions+and+Middleware.&demo-url=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2F&external-id=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&demo-image=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2Fopengraph-image.png)
+## 🏗 Tech Stack
 
-The above will also clone the Starter kit to your GitHub, you can clone that locally and develop locally.
+### 🎨 Frontend & Backend
 
-If you wish to just develop locally and not deploy to Vercel, [follow the steps below](#clone-and-run-locally).
+- [Next.js](https://nextjs.org/) (Full-stack framework for React)
+- [TailwindCSS](https://tailwindcss.com/) (Utility-first CSS framework)
+- [shadcn/ui](https://ui.shadcn.com/) (Modern UI components)
+- [React Leaflet](https://react-leaflet.js.org/) (Map visualization)
 
-## Clone and run locally
+### 💾 Database & Authentication
 
-1. You'll first need a Supabase project which can be made [via the Supabase dashboard](https://database.new)
+- [Supabase](https://supabase.io/) (PostgreSQL as a hosted database)
+- PostgreSQL (Relational database management system)
+- Google OAuth (Third-party authentication)
+- Email & Password Authentication
 
-2. Create a Next.js app using the Supabase Starter template npx command
+---
+
+## 🎬 Getting Started
+
+### 🚀 Installation
+
+1. Clone the repository:
 
    ```bash
-   npx create-next-app -e with-supabase
+   git clone https://github.com/yourusername/parkify.git
+   cd parkify
    ```
 
-3. Use `cd` to change into the app's directory
+2. Install dependencies:
 
    ```bash
-   cd name-of-new-app
+   npm install
+   # or
+   yarn install
    ```
 
-4. Rename `.env.example` to `.env.local` and update the following:
+3. Set up environment variables in a `.env.local` file:
 
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   NEXTAUTH_SECRET=your_nextauth_secret
+   GOOGLE_CLIENT_ID=your_google_client_id
+   GOOGLE_CLIENT_SECRET=your_google_client_secret
    ```
-   NEXT_PUBLIC_SUPABASE_URL=[INSERT SUPABASE PROJECT URL]
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=[INSERT SUPABASE PROJECT API ANON KEY]
-   ```
 
-   Both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` can be found in [your Supabase project's API settings](https://app.supabase.com/project/_/settings/api)
-
-5. You can now run the Next.js local development server:
+4. Run the development server:
 
    ```bash
    npm run dev
+   # or
+   yarn dev
    ```
 
-   The starter kit should now be running on [localhost:3000](http://localhost:3000/).
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-6. This template comes with the default shadcn/ui style initialized. If you instead want other ui.shadcn styles, delete `components.json` and [re-install shadcn/ui](https://ui.shadcn.com/docs/installation/next)
+---
 
-> Check out [the docs for Local Development](https://supabase.com/docs/guides/getting-started/local-development) to also run Supabase locally.
+## 📸 Features Preview
 
-## Feedback and issues
+- **Home Page** ![(home_page.png)](public/images/features/home_page.png)
+- **Sign In Page** ![alt text](public/images/features/sign_in_page.png)
+- **Manage Parking Spots Page** ![(manage_parking_spots_page.png)](public/images/features/manage_parking_spots_page.png)
+- **Create Parking Spot Page** ![(create_parking_spot_page.png)](public/images/features/create_parking_spot_page.png)
+- **Edit Parking Spot Page** ![alt text](public/images/features/edit_parking_spot_page.png)
+- **Admin Profile Page** ![alt text](public/images/features/admin_profile_page.png)
+- **Admin Bookings Page** ![(bookings_page_admin.png)](public/images/features/bookings_page_admin.png)
+- **Find Parking Page** ![alt text](public/images/features/find_parking_spot_page.png)
+- **User Booking Page** ![(booking_page.png)](public/images/features/booking_page.png)
 
-Please file feedback and issues over on the [Supabase GitHub org](https://github.com/supabase/supabase/issues/new/choose).
+---
 
-## More Supabase examples
+## 🛠 Future Enhancements
 
-- [Next.js Subscription Payments Starter](https://github.com/vercel/nextjs-subscription-payments)
-- [Cookie-based Auth and the Next.js 13 App Router (free course)](https://youtube.com/playlist?list=PL5S4mPUpp4OtMhpnp93EFSo42iQ40XjbF)
-- [Supabase Auth and the Next.js App Router](https://github.com/supabase/supabase/tree/master/examples/auth/nextjs)
+- 📱 **Mobile App** version using React Native.
+- 🏷 **Dynamic Pricing System** for parking spots.
+- 📍 **Real-time location** for nearest parking suggestions.
+- 💳 **In-app Payments** for easy transactions.
+
+---
+
+## 🧑‍💻 Contributing
+
+Contributions are welcome! To contribute:
+
+1. Fork the repository.
+2. Create a feature branch (`git checkout -b feature-name`).
+3. Commit your changes (`git commit -m 'Added new feature'`).
+4. Push to the branch (`git push origin feature-name`).
+5. Open a Pull Request.
+
+---
+
+## 📫 Contact
+
+For any inquiries or feedback, feel free to reach out:
+
+- 📧 Email: [manishjoc14@gmail.com](mailto:manishjoc14@gmail.com)
+- 🐦 Twitter: [@manish_joshi14](https://twitter.com/manish_joshi14)
+- 🌐 Website: [manish-joshi.vercel.app](https://manish-joshi.vercel.app/)
+
+---
+
+⭐ **If you like this project, don't forget to give it a star!** ⭐
+

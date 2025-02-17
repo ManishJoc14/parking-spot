@@ -33,7 +33,7 @@ export default function NavLinks() {
             key={uuidv4()}
             href={link.href}
             className={clsx(
-              "flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-mont-medium hover:bg-primary/10 hover:text-primary transition-all md:flex-none md:justify-start md:p-2 md:px-3",
+              "flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 dark:bg-gray-800 p-3 text-sm font-mont-medium hover:bg-primary/10 hover:text-primary transition-all md:flex-none md:justify-start md:p-2 md:px-3",
               {
                 "bg-primary/10 text-primary": pathname.includes(link.href),
               }

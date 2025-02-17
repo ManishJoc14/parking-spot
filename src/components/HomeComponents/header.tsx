@@ -41,7 +41,7 @@ export default function Header() {
         </nav>
 
         {/* Desktop Login Button */}
-        <div className="hidden md:block">
+        <div className="hidden md:block mr-10">
           <HeaderAuth />
         </div>
 

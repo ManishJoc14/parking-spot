@@ -102,7 +102,7 @@ export default function ParkingSpotReviewForm({
   };
 
   return (
-    <Card className="w-full mx-auto">
+    <Card className="w-full mx-auto bg-white dark:bg-black">
       <CardHeader>
         <CardTitle className="font-mont-semibold">Leave a Review</CardTitle>
       </CardHeader>

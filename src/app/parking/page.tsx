@@ -220,7 +220,7 @@ export default function SearchPage() {
   }, [userPosition, search, activeFilters, ordering, offset, GetQueryParams]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-black">
       <div className="container mx-auto px-1 sm:px-4 pb-6">
         <div className="flex flex-col lg:flex-row gap-1">
           {/* Left Section */}
@@ -351,7 +351,7 @@ export default function SearchPage() {
                 </div>
               }
               endMessage={
-                <p className="text-center text-gray-500 text-sm py-6">
+                <p className="text-center text-gray-500 dark:text-gray-300 text-sm py-6">
                   No more parking spots available.
                 </p>
               }
@@ -370,7 +370,7 @@ export default function SearchPage() {
 
           {/* Map Section */}
           <div className="w-full h-full sticky flex-[2] top-4 order-[3] sm:order-[10]">
-            <div className="bg-white rounded-lg shadow-sm p-4 h-screen">
+            <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-4 h-screen">
               <Map
                 uuid={undefined}
                 parking={parkings}

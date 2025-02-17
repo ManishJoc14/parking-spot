@@ -17,7 +17,7 @@ export function UpdateParkingSpot({ uuid }: { uuid: string }) {
   return (
     <Link
       href={`/admin/parking-spots/${uuid}/edit`}
-      className="rounded-md border p-2 hover:bg-gray-100"
+      className="rounded-md border p-2 text-gray-500 dark:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-300"
     >
       <Pen className="w-4" />
     </Link>
@@ -28,7 +28,7 @@ export function DeleteParkingSpot({ uuid }: { uuid: string }) {
   return (
     <>
       <form>
-        <button className="rounded-md border p-2 hover:bg-gray-100">
+        <button className="rounded-md border p-2 text-gray-500 dark:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-300">
           <p className="hidden">{uuid}</p>
           <span className="sr-only">Delete</span>
           <Trash2 className="w-4" />

@@ -34,7 +34,7 @@ export default function HowItWorks() {
           How It Works?
         </span>
       </div>
-      <h2 className="text-2xl text-center sm:text-4xl font-mont-bold text-gray-800">
+      <h2 className="text-2xl text-center sm:text-4xl font-mont-bold text-gray-800 dark:text-gray-300 ">
         Guide to <span className="text-primary">Renting Parking</span>
         <span className="block">
           {" "}

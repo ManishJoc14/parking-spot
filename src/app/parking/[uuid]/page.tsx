@@ -116,7 +116,7 @@ export default function ParkingBookingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-black">
       {/* Cover Image section START */}
       <div className="relative w-full h-[70vh]">
         {parkingDetailed.coverImage && parkingDetailed.coverImage.startsWith(process.env.NEXT_PUBLIC_SUPABASE_URL!) ? (
@@ -128,7 +128,7 @@ export default function ParkingBookingPage() {
             priority
           />
         ) : (
-          <div className="h-full min-w-[100px] w-full bg-gray-100"></div>
+          <div className="h-full min-w-[100px] w-full bg-gray-100 dark:bg-gray-700"></div>
         )}
         
         <div className="absolute inset-0 bg-black bg-opacity-40 flex items-end">
@@ -158,7 +158,7 @@ export default function ParkingBookingPage() {
         <div className="grid lg:grid-cols-[1fr,400px] gap-2">
           <ScrollArea className="h-full sm:pr-6">
             <div className="space-y-8">
-              <Card className="overflow-hidden">
+              <Card className="overflow-hidden bg-gray-50 dark:bg-gray-900">
                 <CardHeader className="p-6">
                   <Tabs defaultValue="details">
                     <TabsList className="grid w-full grid-cols-4 mb-6">
@@ -187,7 +187,7 @@ export default function ParkingBookingPage() {
                       </div>
                       <hr className="my-3" />
 
-                      <p className="text-gray-700 text-lg mb-8">
+                      <p className="text-gray-800 dark:text-gray-400 text-lg mb-8">
                         {parkingDetailed.description}
                       </p>
                       <h3 className="font-mont-medium text-lg mb-2">
@@ -198,7 +198,7 @@ export default function ParkingBookingPage() {
                           (vehicle) => (
                             <div
                               key={uuidv4()}
-                              className="flex items-center bg-gray-100 hover:bg-gray-200 transition-all rounded-lg p-4"
+                              className="flex items-center bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 transition-all rounded-lg p-4"
                             >
                               <GetVehicleTypeIcon
                                 vehicleType={vehicle.vehicleType as VehicleType}
@@ -216,7 +216,7 @@ export default function ParkingBookingPage() {
                         {parkingDetailed.features.map((feat, index) => (
                           <div
                             key={uuidv4()}
-                            className="flex items-center bg-gray-100 hover:bg-gray-200 transition-all rounded-lg p-4"
+                            className="flex items-center bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 transition-all rounded-lg p-4"
                           >
                             <GetFeatureTypeIcon
                               parkingFeature={
@@ -240,7 +240,7 @@ export default function ParkingBookingPage() {
                           <div
                             key={uuidv4()}
                             className={clsx(
-                              "flex flex-col justify-center bg-gray-100 hover:bg-gray-200 transition-all rounded-lg p-4",
+                              "flex flex-col justify-center bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 transition-all rounded-lg p-4",
                               {
                                 "bg-green-300":
                                   getDayInNumber(DayOfWeek[slot.day as keyof typeof DayOfWeek]) ===
@@ -272,7 +272,7 @@ export default function ParkingBookingPage() {
                               key={uuidv4()}
                               className="w-full order-2 mx-auto shadow-none border-none relative"
                             >
-                              <CardContent className="p-0 z-10 bg-white hover:bg-gray-100 py-2 transition-all relative rounded-lg">
+                              <CardContent className="p-0 z-10 bg-white hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 py-2 transition-all relative rounded-lg">
                                 <div className="space-y-4">
                                   <div className="flex flex-col gap-2 sm:flex-row items-center space-y-2">
                                     {/* IMAGE */}

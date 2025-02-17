@@ -146,7 +146,7 @@ export default function BookingForm({ id, parkingDetailed }: BookingFormProps) {
   };
 
   return (
-    <Card className="sticky mt-6 md:mt-0 top-6">
+    <Card className="sticky mt-6 md:mt-0 top-6 bg-white dark:bg-gray-900">
       <CardHeader className="p-6 pb-0">
         <CardTitle className="text-xl font-mont-bold">
           Book Your Parking

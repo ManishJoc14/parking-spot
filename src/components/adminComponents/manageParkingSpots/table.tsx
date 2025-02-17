@@ -23,12 +23,12 @@ export default function ParkingSpotsTable({
   return (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">
-        <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
+        <div className="rounded-lg bg-gray-50 dark:bg-gray-900 p-2 md:pt-0">
           <div className="md:hidden">
             {data?.map((spot) => (
               <div
                 key={uuidv4()}
-                className="mb-2 w-full rounded-md bg-white p-4"
+                className="mb-2 w-full rounded-md p-4"
               >
                 <div className="flex items-center justify-between border-b pb-4">
                   <div>
@@ -41,7 +41,7 @@ export default function ParkingSpotsTable({
                           className="rounded-full"
                         />
                       ) : (
-                        <div className="h-7 w-7 aspect-square text-xs rounded-full bg-gray-200 flex justify-center items-center">
+                        <div className="h-7 w-7 aspect-square text-xs rounded-full bg-gray-200 dark:bg-gray-800 flex justify-center items-center">
                           {spot.name
                             .split(" ")
                             .map((n) => n.charAt(0).toUpperCase())
@@ -73,7 +73,7 @@ export default function ParkingSpotsTable({
           </div>
 
           {/* Table View */}
-          <table className="hidden min-w-full text-gray-900 md:table">
+          <table className="hidden min-w-full text-gray-900 dark:text-gray-300 md:table">
             <thead className="rounded-lg text-left text-sm font-normal">
               <tr>
                 {headers.map((header) => (
@@ -90,7 +90,7 @@ export default function ParkingSpotsTable({
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white font-mont-medium">
+            <tbody className="bg-white dark:bg-gray-800 font-mont-medium">
               {data?.map((spot) => (
                 <tr
                   key={uuidv4()}
@@ -106,7 +106,7 @@ export default function ParkingSpotsTable({
                           className="rounded-full"
                         />
                       ) : (
-                        <div className="h-7 w-7 aspect-square text-xs rounded-full bg-gray-200 flex justify-center items-center">
+                        <div className="h-7 w-7 aspect-square text-xs rounded-full bg-gray-200 dark:bg-gray-800 flex justify-center items-center">
                           {spot.name
                             .split(" ")
                             .map((n) => n.charAt(0).toUpperCase())
@@ -154,7 +154,7 @@ function ImageWithLoading({
 
   return (
     <div className="relative h-7 w-7">
-      {isLoading && <div className="absolute inset-0 animate-pulse bg-gray-200"></div>}
+      {isLoading && <div className="absolute inset-0 animate-pulse bg-gray-200 dark:bg-gray-800"></div>}
       <Image
         src={src}
         alt={alt}
